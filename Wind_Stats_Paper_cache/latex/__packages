@@ -1,0 +1,17 @@
+base
+HarpR
+bookdown
+ggplot2
+ggmap
+tidyverse
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+DiagrammeR
+ggsci
+ggthemes
+bindrcpp

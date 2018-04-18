@@ -1,0 +1,29 @@
+digraph G {
+  graph[font = fontcm]
+  node [fontname = "helvetica", shape=box, style = filled, fillcolor = WhiteSmoke, width = 1.4, height = 0.6 fontcolor = black];
+  rankdir=TB
+  
+
+  
+  
+  Parameters[label = "Model \n Parameters", fillcolor = "#70AFD1"]
+  Model[label = "Model", fillcolor = "#CBE1EE"]
+  Results[label = "Predicted \n Results", fillcolor = "#B8C7CE"]
+  
+  Parameters -> Model -> Results
+  
+    
+  Observed[label = "Observations", fillcolor = "#B8C7CE"]
+  Model2[label = "Model", fillcolor = "#CBE1EE"]
+  Parameters2 [label = "Model \n Parameters", fillcolor = "#70AFD1"]
+  
+  Observed -> Model2 -> Parameters2 [dir=backward]
+  
+  node [shape=plaintext, style = filled, fillcolor = none, width = 0.1 text = black, ];
+  Forward[label=< <B>(a) Forward Theory</B> >]
+  Inverse[label=< <B>(b) Inverse Theory</B> >]
+  Blank[label=" "]
+  
+  Forward -> Parameters [style=invis]
+  Inverse -> Observed [style=invis]
+}

@@ -1,0 +1,170 @@
+# Detailed Logistic Regression Results {#LogRegDetailed}
+
+\footnotesize
+
+```{r}
+# Load Global Settings
+source("_scripts/LogisticRegressionSettings.R")
+```
+
+This section provides the full outputs of the Hierarchical logistic regression analysis in addition to the results presented in Section \@ref(HierarchicalLog).
+
+## Model 1: Physical attributes of the plant
+
+This is based on some of the physical attributes of the wind turbines proposed. This includes the number of wind turbines of the site, and the turbine capacity which can be used to indicate the turbine size. The model initially included the overall wind farm capacity, however it was found that this was this was highly collinear with the number of turbines on the site. The capacity was therefore removed to reduce this influence on the model.
+
+```{r, echo = TRUE}
+variables_model_1 <- c("No..of.Turbines", "Turbine.Capacity..MW.")
+wind_models <- NULL
+wind_models$No1 <- LogisticModel(variables_model_1, data_turbines)
+(summary_model1 <- summary(wind_models$No1)) # Print Results
+```
+
+```{r, echo = TRUE}
+# Check Diagnostics
+LogisticDiagnostics(wind_models$No1)
+```
+
+The Pseudo $R^{2}$ values highlight the relatively low level of the model. There are no issues with collinearity of the two variables or autocorrelation from the Durbin Watson Test.
+
+```{r, echo = TRUE}
+# Check Linearity of variables against logit
+LogisticModelInt(variables_model_1, "Status.Summary", data_turbines)
+
+```
+
+The logarithmic transformations are not statistically significant, which suggest that there are no issues with the linearity. 
+
+## Model 2: Developer Parameters
+
+The second model considers parameters which may be of interest to a developer, such as the site wind speed, proximity to powerlines and urban areas.
+
+```{r, echo =TRUE}
+# Add variables to parameter List
+variables_model_2 <- ParameterUpdate(input = variables_model_1, add = c("WindSpeed45", "HVpowerline"))
+wind_models$No2 <- LogisticModel(variables_model_2, data_turbines)
+(summary_model2 <- summary(wind_models$No2))
+```
+
+```{r}
+# Diagnostics
+LogisticDiagnostics(wind_models$No2)
+```
+
+```{r, echo = TRUE}
+# Linearity of variables against logit
+LogisticModelInt(variables_model_2, "Status.Summary", data_turbines)
+```
+
+Results suggest that HV Powerlines should be checked as they are not linear.
+
+There is a relatively limited improvement in this model compared to the first model. Proximity to powerlines is seen as a significant parameter, however there appear to be issues with its linearity to the logit.
+
+## Model 3: Year of Application
+
+```{r, echo = TRUE}
+variables_model_3 <- ParameterUpdate(variables_model_2, add = c( "year"))
+wind_models$No3 <- LogisticModel(variables_model_3, data_turbines)
+(summary_model3 <- summary(wind_models$No3))
+```
+
+## Model 4: Proximity to Features
+
+This model builds upon the previous models to include the full list of geospatial parameters derived in the previous analysis. These provide the proximity to the nearest features and include landscape and environmental designations.
+
+
+```{r, echo = TRUE}
+variables_model_4 <- ParameterUpdate(variables_model_3, add = c( "Airports_Trans", "ARoads_Trans", "BRoads_Trans", "MinRoads_Trans", "Motorways_Trans",  "Railway_Trans", "UrbanRegions_Trans", "AONB_Trans", "NationalParks_Trans", "HCoast_Trans", "NNR_Trans", "RAMSAR_Trans", "SACS_Trans", "SPA_Trans", "SSSI_Trans", "MilitarySites_Trans"))
+wind_models$No4 <- LogisticModel(variables_model_4, data_turbines)
+(summary_model4 <- summary(wind_models$No4))
+```
+
+Check to see whether regression model adequately represents the data. 
+
+```{r}
+# Diagnostics
+LogisticDiagnostics(wind_models$No4)
+```
+
+
+```{r}
+# Check Linearity
+LogisticModelInt(variables_model_4, "Status.Summary", data_turbines)
+```
+
+Areas of Outstanding Natural Beauty (AONB), National Parks and SPAs are statistically significant environmental and landscape designations. However it appears that there may be issues with AoNB linearity.
+
+## Model 5: Census Variables
+
+This model adds Census data to understand whether demographic variables can be linked to the turbines. Qualifications, Age, Social Grade and Tenure were added to the model.
+
+```{r}
+
+variables_model_5 <- ParameterUpdate(variables_model_4, add = c("QualPercL4", "AgeMean", "TenureOwned"))
+
+wind_models$No5 <- LogisticModel(variables_model_5, data_turbines)
+(summary_model5 <- summary(wind_models$No5))
+
+```
+
+Check to see whether regression model adequately represents the data. 
+
+```{r, echo = TRUE}
+# Diagnostics
+LogisticDiagnostics(wind_models$No5)
+```
+
+```{r}
+# Linearity
+LogisticModelInt(variables_model_5, "Status.Summary", data_turbines)
+```
+
+Conclusions:
+
+- Increased levels of qualification appear to reduce the likelihood of acceptance
+- Age_Median and Mean are highlight collinear. Median value removed
+
+## Model 6: Political Parameters
+
+This adds information from local authority composition. Represents the complete model presented within the report.
+
+```{r, echo=TRUE}
+variables_model_6 <- ParameterUpdate(variables_model_5, add = c("Con_share", "Lab_share", "LD_share"))
+# Could add "SNP_PC_sha"
+wind_models$No6 <- LogisticModel(variables_model_6, data_turbines)
+(summary_model6 <- summary(wind_models$No6))
+
+```
+
+
+```{r, echo =TRUE}
+# Diagnostics
+LogisticDiagnostics(wind_models$No6)
+```
+
+## Model 7: Cumulative Development
+
+This includes parameters which indicate how site the planning permission was to other sites at the time of the application.
+
+```{r, echo=TRUE}
+variables_model_7 <- ParameterUpdate(variables_model_6, add = c("NearestTurbineBuilt", "NearestTurbineRejected", "UrbanLarge"), remove = "UrbanRegions")
+wind_models$No7 <- LogisticModel(variables_model_7, data_turbines)
+(summary_model7 <- summary(wind_models$No7))
+```
+Check to see whether regression model adequately represents the data. 
+
+```{r, echo = TRUE}
+# Diagnostics
+LogisticDiagnostics(wind_models$No7)
+```
+
+```{r}
+# Linearity
+LogisticModelInt(variables_model_7, "Status.Summary", data_turbines)
+```
+
+```{r}
+save(variables_model_7, file =file.path("../data/process/6_Statistics/ResultParametersHierarchical.RData"))
+```
+\normalsize
+
