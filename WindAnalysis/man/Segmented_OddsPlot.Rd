@@ -4,7 +4,8 @@
 \alias{Segmented_OddsPlot}
 \title{Builds an odds plot for a segmented logistic regression model}
 \usage{
-Segmented_OddsPlot(OddsTables, PlotTitle, linebreak)
+Segmented_OddsPlot(OddsTables, PlotTitle, linebreak,
+  displayNamesDF = WindAnalysis::displayNamesDF)
 }
 \arguments{
 \item{OddsTables}{a list of odds as produced from the function "OddsTableSegmented"}

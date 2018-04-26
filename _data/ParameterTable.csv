@@ -1,0 +1,31 @@
+ID,Category,Variable,Source,Data Type,Variable Value,Value Type,Unit
+1,Turbine,Wind Turbine Planning Data,REPD,Tabular,Planning Outcome,Categorical,Accept/Reject
+2,,Turbine Capacity,,Tabular,Megawatts/turbine,Continuous,MW
+3,,Number of Turbines,,Tabular,,Continuous,
+4,,Year,,Tabular,,Discrete,
+5,,Country,,Tabular,,Categorical,
+6,Resource,Wind Speed,NOABL,Raster,Annualised Wind Speed,Continuous,m/s
+7,Features,Airports,OpenGeo,Points,Distance to Feature,Continuous,km
+8,,Roads\textsuperscript{a},OS Strategi,Lines,Distance to Feature,Continuous,km
+9,,Railways,,Lines,Distance to Feature,Continuous,km
+10,,Urban Areas,,Polygons,Distance to Feature,Continuous,km
+11,,HV Powerlines\textsuperscript{b},OSM,Lines,Distance to Feature,Continuous,km
+12,,Military Sites,OSM,"Points, Polygons",Distance to Feature,Continuous,km
+13,Landscape,Areas of Outstanding Natural Beauty,National Heritage,Polygons,Distance to Feature,Continuous,km
+14,,National Parks,,Polygons,Distance to Feature,Continuous,km
+15,,Heritage Coast,,Polygons,Distance to Feature,Continuous,km
+16,Nature,Special Protection Areas,,Polygons,Distance to Feature,Continuous,km
+17,,National Nature Reserve,,Polygons,Distance to Feature,Continuous,km
+18,,Sites of Special Scientific Interest,,Polygons,Distance to Feature,Continuous,km
+19,,Special Areas of Conservation,,Polygons,Distance to Feature,Continuous,km
+20,Geographic,Elevation,EU DEM,Raster,Height above sea level,Integer,m
+21,,Slope,Derived from 18,Raster,Gradient,Continuous,\%
+22,Census,Level of Qualification\textsuperscript{c},ONS,Tabular,Higher than L4,Continuous,\%
+23,,Age,,Tabular,Mean,Continuous,Years
+24,,Social Grade\textsuperscript{d},,Tabular,Social Grade AB,Continuous,\%
+25,,Tenure,,Tabular,Home Ownership,Continuous,\%
+26,Political,Conservatives,Populus,Tabular,Percentage of Council,Continuous,\%
+27,,Labour,,Tabular,Percentage of Council,Continuous,\%
+28,,Liberal Democrat,,Tabular,Percentage of Council,Continuous,\%
+29,Proximity,Nearest Turbine (Operational),Calculated,Points,Distance to Turbine,Continuous,km
+30,,Nearest Turbine (Rejected),Calculated,Points,Distance to Turbine,Continuous,km

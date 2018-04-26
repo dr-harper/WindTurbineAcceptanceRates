@@ -60,12 +60,14 @@ LogisticDiagnostics <- function(Model){
 #' @export
 #'
 OddsTable <- function(Model, round = 3){
+  get("data/displayNames.RData")
+
   odds <- exp(Model$coefficients)
   # Compute Confidence Intervals for Logistic Model parameters
   CI <- suppressMessages(exp(stats::confint(Model)))
   results <- cbind(odds, CI) # Create Results Table
   results <- as.data.frame(cbind(odds, CI)) # Create Results Table
-  row.names(results) <- matchNames(row.names(results))
+  row.names(results) <- matchNames(row.names(results), WindAnalysis::displayNamesDF)
   results <-  round(results, digits = round)
   return(results)
 }
@@ -333,7 +335,7 @@ LogOddsPlotGraph <- function(OddsTable, PlotTitle, Sort = FALSE){
   ModelDF <- OddsTable
 
   # Rename Variables
-  names <- utils::read.csv("VariableDisplayNames.csv", stringsAsFactors = FALSE)
+  names <- utils::read.csv("../_data/VariableDisplayNames.csv", stringsAsFactors = FALSE)
   ModelDF$term <- names[match(x = ModelDF$term, table = names$Label, nomatch = ""), 2]
 
   Terms <- ModelDF$term
@@ -577,14 +579,14 @@ Segmented_OddsTable <- function(LogisticModelList){
 #' @param linebreak numeric. Spacing between minor line breaks in plot
 #' @export
 #
-Segmented_OddsPlot <- function(OddsTables, PlotTitle, linebreak){
+Segmented_OddsPlot <- function(OddsTables, PlotTitle, linebreak, displayNamesDF = WindAnalysis::displayNamesDF){
 
   requireNamespace("ggplot2")
 
   Combined <- NULL # Blank table for results
 
   # Load reference names
-  names <- utils::read.csv("VariableDisplayNames.csv")
+  names <- displayNamesDF
 
   for (i in 1:length(OddsTables)){ # Loop combines models into a single table
     datasetname <- (names(OddsTables[i])) # Extract name of the submodel
@@ -646,7 +648,7 @@ Segmented_OddsPlotGroupedCustom <- function(OddsTables, linebreak = 0.2, scale =
   Combined <- NULL # Blank table for results
 
   # Load reference names
-  names <- utils::read.csv("VariableDisplayNames.csv")
+  names <- utils::read.csv("../_data/VariableDisplayNames.csv")
 
   for (i in 1:length(OddsTables)){ # Loop combines models into a single table
     datasetname <- (names(OddsTables[i])) # Extract name of the submodel
@@ -756,11 +758,11 @@ my.summary <- function(x, rounded = 1, ...){
 #' This function is designed to work with the PhD project
 #'
 #' @param inputNames a list of names which are to looked up
-#' @param path the filepath of the lookup file
+#' @param displayNamesDF the filepath of the lookup file
 #' @export
 #'
-matchNames <- function(inputNames, path = "VariableDisplayNames.csv"){
-  names <- utils::read.csv(path, stringsAsFactors = FALSE)
+matchNames <- function(inputNames, displayNamesDF = WindAnalysis::displayNamesDF){
+  names <- displayNamesDF
   return(names[match(x = inputNames, table = names$Label, nomatch = ""), 2])
 }
 
@@ -770,10 +772,10 @@ matchNames <- function(inputNames, path = "VariableDisplayNames.csv"){
 #' This function is designed to work with the PhD project
 #'
 #' @param inputNames a list of names which are to looked up
-#' @param path the filepath of the lookup file
+#' @param displayNamesDF the filepath of the lookup file
 #'
-matchUnits <- function(inputNames, path = "VariableDisplayNames.csv"){
-  names <- utils::read.csv(path, stringsAsFactors = FALSE)
+matchUnits <- function(inputNames, displayNamesDF = WindAnalysis::displayNamesDF){
+  names <- displayNamesDF
   return(names[match(x = inputNames, table = names$Label, nomatch = ""), 3])
 }
 
@@ -783,11 +785,11 @@ matchUnits <- function(inputNames, path = "VariableDisplayNames.csv"){
 #' This function is designed to work with the PhD project
 #'
 #' @param inputNames a list of names which are to looked up
-#' @param path the filepath of the lookup file
+#' @param displayNamesDF the filepath of the lookup file
 #' @export
 #'
 matchCategory <- function(inputNames, path = "VariableDisplayNames.csv"){
-  names <- utils::read.csv(path, stringsAsFactors = FALSE)
+  names <- displayNamesDF
   return(names[match(x = inputNames, table = names$Label, nomatch = ""), 4])
 }
 
@@ -797,10 +799,11 @@ matchCategory <- function(inputNames, path = "VariableDisplayNames.csv"){
 #'
 #' @param dataframe a list of names which are to looked up
 #' @param dropNA a TRUE/FALSE selection whether names should be dropped if empty
+#' @param displayNamesDF the path of the reference file
 #' @export
 #'
-matchNamesColumns <- function(dataframe, dropNA = TRUE){
-  ReplacementNames <- matchNames(names(dataframe))
+matchNamesColumns <- function(dataframe, displayNamesDF, dropNA = TRUE){
+  ReplacementNames <- matchNames(names(dataframe), WindAnalysis::displayNamesDF)
   names(dataframe) <- ReplacementNames
   if(dropNA){dataframe <- dataframe[,-c(which(ReplacementNames == ""))]}
   return(dataframe)
@@ -1088,8 +1091,8 @@ CrossValidation <- function(dataframe, iterations, foldSize, fullstats= FALSE){
     answers <- ifelse(test[, 1] == "Approved", 0, 1) %>% as.numeric()
     answers <- factor(answers, levels = c("1", "0"))
 
-    misClasificError <- mean(answers != results)  # Accuracy calculation
-    acc[i] <- 1 - misClasificError  # Collecting results
+    acc[i]  <- mean(answers != results)  # Accuracy calculation
+
 
     # Confusion matrix
     cm <- caret::confusionMatrix(data = results, reference = answers)

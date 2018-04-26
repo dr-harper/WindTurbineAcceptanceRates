@@ -1,0 +1,694 @@
+---
+title: "Supplementary Statistical Analysis"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+author: Michael Harper, Ben Anderson, Patrick James, AbuBakr Bahaj
+output: 
+  bookdown::html_document2:
+    toc: TRUE
+    toc_float: TRUE
+    code_download: TRUE
+    theme: flatly
+    code_folding: show
+  tufte::tufte_handout: default
+bibliography: [_bib/packages.bib, _bib/bibliography.bib]
+---
+
+## About {-}
+
+This file documents the full statistical analysis and provides detailed R analysis. The file includes all data and functions required to reproduce the analysis. The work has been produced using **rmarkdown** [@R-rmarkdown].
+
+----
+
+# Setup
+
+To run the script, you will have to install the package `WindAnalysis`. This depends on the packages `caret`, `corrplot`, `ggplot2`, `magrittr`, `Hmisc`, `broom`, `car`, `plyr`, `psych`, `stats`, `ggthemes`, `grid`, `DiagrammeR`, `rsvg`, `DiagrammeRsvg`, `scales`, `knitr`. These packages are installed if they are not on the system when the `WindAnalysis` [@R-WindAnalysis] package is used. 
+
+```{r install-windanalysis, eval = FALSE}
+# This will not run automatically when you knit the file
+devtools::install_local("WindAnalysis")
+```
+
+
+```{r setup, message=FALSE, warning=FALSE}
+library(WindAnalysis)
+library(tidyverse)
+library(magrittr)
+
+# General knitr Options
+knitr::opts_chunk$set(tidy = TRUE, fig.align = "center")
+```
+
+# Turbine Dataset
+
+The turbine dataset represents the results after the full data aggregation has been completed. Spatial joins were used to map variables to the turbine sites The chunk completes the following processes:
+
+- Loads the data
+- Removes any planning applications still in process
+- Converts planning permission to a dichotomous variable
+- Filters out small wind turbine projects (below 1MW)
+
+```{r loadData}
+# Logistic Regression Input Files
+
+df_turbine <- read.csv("../_data/TurbineFullInfo.csv") %>%
+  dplyr::filter(Status.Summary != "Submitted") %>% 
+  dplyr::filter(Size == "Large") %>%
+  mutate(Status.Summary = factor(Status.Summary, levels=c("Refused/Abandoned","Approved")),
+         Planning_Status_Code = (Status.Summary  %in% "Approved")*1) %>%
+  dplyr::filter(year < 2016)
+  
+# Variables used in model
+variables <- read.csv("../_data/StatisticalVariables.csv")
+model_variables <- as.character(variables$Variable)
+```
+
+------
+
+# Preliminary Data Checks
+
+Statistical models are fundamentally influenced by the quality of the data used to build them. Failing to understand any limitations within the dataset can result in misspecified statistical models. It is therefore critical that checks are conducted to fully understand any potential issues within input parameters before modelling, and that any assumptions required for the statistical analysis are met. This section therefore presents the preliminary analysis conducted to understand the dataset.
+
+### Summary Statistics
+
+Summary statistics provide a useful overview of the modelling data, and can provide an indication of issues which may warrant further exploration. Table \@ref(tab:SummaryStatistics) presents the statistics for the numeric variables within the model. It can be seen that the geospatial proximity to features used within the study vary significantly in their range. For example, the maximum distance a wind energy project is from *Urban Regions* is `r max(df_turbine$UrbanRegions) %>% round(., 1)`km while *Heritage Coast* has a range of `r max(df_turbine$HCoast) %>% round(., 1)`km. Such a large difference in range can create difficulty in interpreting results, as a unit change of 1km has a much larger impact on the *Urban Region* parameter than *Heritage Coast*.
+
+```{r CreateSummaryTable, message = FALSE}
+
+# Select Numberic Rows
+turbines_numeric <- df_turbine %>% 
+  FiltNumericColumns()
+
+# Remove Empty Columns
+turbines_numeric <- turbines_numeric %>%
+  select(-one_of(c('RO Banding', 'NA', 'NA.1', 'NA.2', 'NA.3', 'NA.4',
+                   'NA.5', 'NA.6', 'Y Coordinate', 'X Coordinate'))) %>%
+  set_rownames(NULL) # Delete RO banding category
+
+# Build Summary Table
+summaryTable <- 
+  turbines_numeric %>%
+  dplyr::select(-1) %>%
+  SummariseDataframe() %>%
+  mutate(Variable = (matchNames(rownames(.)))) %>%
+  dplyr::filter(Variable != "") %>%
+  select(Variable, everything())
+```
+
+(ref:SummaryStatistics)  Summary statistics of the parameters collected for onshore wind energy within the statistical analysis. These values represent the dataset before missing values were imputed
+
+```{r SummaryStatistics, echo=FALSE}
+knitr::kable(summaryTable, booktabs = TRUE, caption = "(ref:SummaryStatistics)")
+```
+
+### Missing Values
+
+```{r MissingValues}
+
+# Calculate number of missing values
+observation_count <- nrow(df_turbine)
+percent_missing <- (1 - (complete.cases(turbines_numeric[names(turbines_numeric) != "Political, SNP Share"]) %>%
+                           multiply_by(1) %>% 
+                           sum)/nrow(df_turbine)) %>% 
+  multiply_by(100) %>% 
+  round(1)
+```
+
+Logistic regression cannot directly deal with missing values within the dataset, and if an observation lacks any single parameter, the whole record will be removed from the data. This can result in a loss of data and potential impact on the modelling results, as a smaller sample size is used to build the model. It is therefore recommended that missing values are assessed, and where appropriate, imputed to create complete records [@Harrell2001, @Griffith2003].
+
+It can be seen within the summary table that there are few cases of missing data across the total dataset (n =`r observation_count`), with a total of `r percent_missing`% observations being incomplete. It was found that Slope, Elevation and Wind Speed missing data was a result of the rasterisation of the input dataset, with sites near the edge of land (rivers, coastline, lakes etc.) being occasionally lost within the dataset. Further missing data was seen within the political data, which resulted from boundary changes in 1995 which made it not possible to map, and the SNP party only exist within Scotland. 
+
+Two techniques were used to impute missing datasets [@MandelJ2015]. Firstly, mean substitution was used to impute missing slope, elevation and political data. For the SNP data, any missing values which were in England and Scotland were imputed as 0. 
+
+```{r ImputeMissingValues}
+# Impute Mean
+for(i in c("Slope", "UKElevation", "WindSpeed45", "Con_share", "LD_share", "Lab_share", "Oth_share")){
+  df_turbine[[i]] <-Hmisc::impute(df_turbine[[i]], what = mean)
+}
+
+# Add "0" to SNP empty values
+df_turbine$SNP_PC_sha <- Hmisc::impute(df_turbine$SNP_PC_sha, 0) %>% as.numeric()
+```
+
+### Influential Outliers
+
+Influential outliers are observations where values deviate from the expected range and produce extremely large residuals [@Hosmer2004]. These can result in incorrect inferences from the statistical model, as the model may overfit to these extreme cases. It is therefore recommended that assessments are made before statistical modelling is conducted to identify potential cases which may need removal. 
+
+Figure \@ref(fig:plotNearestTurbine) a) highlights the distribution of proximity variables, and provides a visual method to identify potential errors. The boxplots highlight that many parameters have outliers, which are largely caused by a narrow interquartile range resulting from the low standard deviations within the dataset. As the outliers are relatively evenly spread throughout the dataset, with few extreme values, they are of limited concern within the modelling.
+
+(ref:plotNearestTurbine) Boxplot for proximity variables which were derived from model parameters. A different censoring distance was applied to Spatial and Spatiotemporal datasets (30km and 80km respectively)
+
+```{r plotNearestTurbine, message=FALSE, warning=FALSE, fig.cap= '(ref:plotNearestTurbine)'}
+
+data_turbine_boxplots <- matchNamesColumns(df_turbine)
+
+## Identify which columns have Distance parameters
+colref <- which((substr(names(data_turbine_boxplots),1 ,8) %in% c("Distance")) == TRUE) 
+data_turbine_boxplots <- data_turbine_boxplots[, colref] %>% reshape2::melt() %>% mutate(id = "a) Spatial")
+data_censored <- dplyr::filter(data_turbine_boxplots, value > 30)
+data_turbine_boxplots2 <- matchNamesColumns(df_turbine)
+
+## Identify which columns have Distance parameters
+colref <- which((substr(names(data_turbine_boxplots2),1 ,8) %in% c("Nearest ")) == TRUE) 
+data_turbine_boxplots2 <- data_turbine_boxplots2[, colref] %>% reshape2::melt() %>% mutate(id = "b) Spatiotemporal")
+data_censored <- filter(data_turbine_boxplots2, value > 30)
+
+lines <- data.frame(id = c("b) Spatiotemporal", "a) Spatial"), value = c(80, 30))
+
+ggplot(rbind(data_turbine_boxplots2,data_turbine_boxplots), aes(x = reorder(variable, value, FUN = median), y = value)) +
+  geom_boxplot(aes(fill = reorder(variable, value, FUN = median)), outlier.shape = 1, outlier.size = 0.5, outlier.alpha = 0.6) +
+  scale_fill_discrete(grDevices::rainbow(20)) +
+  scale_y_continuous(limits=c(0, 400)) +
+  coord_flip() +
+  theme(legend.position="none") +
+  labs(x = "", y = "Distance, (km)") +
+  geom_hline(data = lines, aes(yintercept = value), linetype = 2, col = "grey10", alpha = 0.5) +
+  facet_grid(id~., scales = "free_y", space = "free_y") +
+  theme(strip.text.y = element_text(angle = 0, colour = "black", hjust = 0),
+        strip.background = element_blank())
+
+```
+
+A second boxplot is shown in Figure \@ref(fig:plotNearestTurbine) b) which highlights the "*Nearest Turbine*" parameter dataset. These are represented separately as their derivation used a different approach to the other geospatial proximity parameters, considering both the *location* and the *year* of the development. This has resulted in a small number of extreme outliers which represent sites which were the first to be developed within a region. Only `r filter(df_turbine, NearestTurbinePlanned>100) %>% nrow` sites were further than 100km from other planned wind energy application sites.
+
+### Censoring Data
+
+```{r HcoastMaxDist}
+# Identify extreme value
+HCoast_max <- df_turbine[which(df_turbine$HCoast == max(df_turbine$HCoast)),]
+HCoast_max_dist <- HCoast_max$HCoast %>% round(0)
+HCoast_max_sitename <- paste(HCoast_max$Site.Name, HCoast_max$County, HCoast_max$Country, sep = ", ")
+HCoast_max_dev <- floor(max(df_turbine$HCoast) / mean(df_turbine$HCoast))
+```
+
+To mitigate any impact from these extreme values, the data was censored to the maximum value based on current development densities. Compared to truncation, whereby the data points are removed from the model, censoring retains the value but limits it a maximum value. It was calculated that 80km was the furthest any site is from a developed wind energy, and this value was therefore set as the maximum value. 
+
+```{r censorNearestTurbine}
+for(i in c("NearestTurbineBuilt", "NearestTurbinePlanned", "NearestTurbineRejected")){
+  df_turbine[[i]] [df_turbine[[i]] > 80] <- 80
+}
+```
+
+
+Further concern was raised for the scale of distance considered for geographic features. As an example, the furthest site from a Heritage Coast designation is `r HCoast_max_dist`km (this site being `r HCoast_max_sitename`). As would be expected, the planning decision^[See https://goo.gl/mUA7QL for the planning decision documentation] for this site made no reference to the Heritage Coast, as clearly a site would not be influenced by a landscape designation so far away. Censoring was therefore applied to the proximity values within the dataset, using the maximum distance of 30km, which is referenced as the greatest distance that wind turbines are perceived to have a visual impact [@Guidance2008].
+
+```{r censorProximity}
+
+# Truncate the long tail of the proximity data. Any relationship greater than 30km is unlikely to influence outcomes
+df_turbine_trunc <- 
+  df_turbine %>%
+  select(Airports, AONB, ARoads, BRoads, HCoast, HVpowerline, MilitarySites, MinRoads, Motorways, NationalParks, NNR, Powerlines, PrimaryRoads, Railway, RAMSAR, SACS, SPA, SSSI, UrbanLarge, UrbanSmall, UrbanRegions)
+
+# Truncate data and merge to original dataframe
+df_turbine_trunc[df_turbine_trunc >= 30] <- 30
+names(df_turbine_trunc) <- paste0(names(df_turbine_trunc), "_Trans")
+df_turbine_trunc <- cbind(Ref_ID = df_turbine$Ref_ID, df_turbine_trunc)
+df_turbine_trunc <- merge(df_turbine, df_turbine_trunc, by = "Ref_ID")
+
+# Also remove extreme wind turbine sizes
+df_turbine_trunc$Capacity[df_turbine_trunc$Capacity > 100] <- NA
+df_turbine_trunc$Turbine.Capacity..MW.[df_turbine_trunc$Turbine.Capacity..MW. > 4] <- NA
+
+# Save to file
+write.csv(df_turbine_trunc, "outputs/turbine_proximity_full.csv")
+```
+
+Two exceptions were made within the censoring process:
+
+1. **Airports**: there is generally a greater impact caused by wind turbines due to flight paths and radar [@CAA2016], and therefore no censoring was applied to turbine data. 
+2. **Nearest Turbine**: literature suggests that regional scale perceptions to wind energy can be influenced by wind turbines, even if it is not visible from the other site [@Eltham2008]. The value was therefore left at the 80km limit set after the removal of outliers previously discussed.
+
+
+### Collinearity
+
+Collinearity between predictor variables can impact on the fit of models, resulting in inflated standard errors of regression coefficients and reducing the power of corresponding tests [@Harrell2001, pg.64]. As a result, checks are recommended to be made both before and after the model has been built. A correlation matrix is shown in Figure \@ref(fig:CorrelationMatrix) which displays the pairwise Pearson product-moment correlation coefficient, and provides a means to visually inspect potential collinearity. The results indicate a number of key relationships:
+
+```{r CorrelationPlot, echo = FALSE}
+
+turbines_cor <- turbines_numeric %>%
+  matchNamesColumns() %>%
+  cor(use="pairwise") %>% 
+  round(2)
+diag(turbines_cor) <- NA
+
+# Produces a list of the correlation results
+zdf <- as.data.frame(as.table(turbines_cor))
+zdf <- subset(zdf, abs(Freq) > 0.5)
+
+FindCorrelation <- function(x,y, corrmatrix){
+  col <- which(names(corrmatrix) == x)
+  row <- which(rownames(corrmatrix) == y)
+  return(corrmatrix[x,y] %>% round(2))
+}
+```
+
+- **Number of Turbines** and **Capacity** (R^2^ = `r FindCorrelation("Number of Turbines", "Capacity", turbines_cor)`): unsurprisingly, this suggests that wind farms with more turbines will have more overall capacity.
+- **Qualifications** and **Social Grade** (R^2^ = `r FindCorrelation("Qualifications, L4", "Social Grade AB", turbines_cor)`): this suggests that those who attain higher professional positions would typically have higher levels of qualifications.
+- **A number of proximity features**: many features (powerlines, roads, railways, military sites) are indicated to have a high level of correlation.
+- **Grouping of linked parameters**: A number of parameters were split or derived from the same datasets which would be expected to be highly correlated. These include 1) Small, Large and All Urban Areas 2) Nearest Turbines All, Nearest Turbine Planned, Nearest Turbine Rejected.
+
+
+(ref:CorrelationMatrix) "Bivariate correlation matrix for predictor variables within the analysis"
+
+```{r CorrelationMatrix, fig.height=11, fig.width= 10, fig.cap = "(ref:CorrelationMatrix)"}
+corrplot::corrplot(turbines_cor, type="upper", order="hclust", tl.col = "black", na.label = " ", number.cex=0.01)
+```
+
+Whilst these correlations provide an important insight into the dataset, it is not recommended that such observations are used as the sole justification for removing parameters from the model. However, these results raise concerns which should be explored further, and therefore additional assessments of multicollinearity were made within the statistical analysis, as presented in Section \@ref(TurbineStatisticalAnalyis).
+
+### Linearity of Logit
+
+As briefly discussed within the influential outliers section, logistic regression assumes linearity between the predictor variable and the logit [@Harrell2001]. Assessments were therefore conducted to assess this assumption, with smoothed scatter plots shown in Figure \@ref(fig:LinearityPlots)^[Note: the graph uses the censored datasets as described within this chapter. Individual observations are shown in the rug plots which highlight the marginal distributions], whereby each point represents an aggregated percentile. Linearity can be assessed by the shape of the fitted curve, and the magnitude of the potential influence is indicated by the gradient of this fit. The following general observations were made:
+
+(ref:LinearityPlotsCap) Scatter plots showing proportion of sites receiving planning against each predictor variable.
+
+```{r LinearityPlots, fig.width=10, fig.height=13, message=FALSE, warning=FALSE, fig.cap="(ref:LinearityPlotsCap)", fig.pos="p", out.width = "100%"}
+
+# Createa a subset of the parameters
+namelist <- c("Airports", "AONB_Trans", "ARoads_Trans", "BRoads_Trans", "HCoast_Trans",
+              "HVpowerline_Trans", "MilitarySites_Trans", "NationalParks_Trans", "NNR_Trans", "Powerlines_Trans",
+              "PrimaryRoads_Trans", "Railway_Trans", "RAMSAR_Trans", "SACS_Trans", "SPA_Trans",
+              "SSSI_Trans", "UrbanLarge_Trans",  "UrbanSmall_Trans", "NearestTurbineBuilt",
+              "NearestTurbinePlanned", "NearestTurbineRejected", "Capacity", "Turbine.Capacity..MW.", "LD_share", "Lab_share",
+              "Con_share", "SNP_PC_sha", "QualPercL4", "SocGrdAB", "PercOwn", "AgeMean", "UKElevation", "Slope", "WindSpeed45")
+
+plots <- lapply(namelist, function(x) ScatterPlotOdds(df_turbine_trunc, variable = x,quantiles =  25))
+do.call(gridExtra::grid.arrange, c(plots, ncol=4))
+```
+
+- **Linearity of relationships**: most proximity features appear to have a linear relationship (AONBs, National Parks, Military, Natura 2000 sites). 
+- **Non-linearity**: Notable examples include Liberal Democrat voter share, and distance to urban areas.
+- **Social Grade, Mean Age and Qualifications**: all three of these variables appear to negatively influence the planning acceptance rates. Combined with the high levels of correlation, these again may suggest multi-collinearity between the variables.
+- **Overfitting of curves**: although efforts were made to remove influential outliers, some graph appear influenced by non-linear relationships (e.g. Heritage Coast, Small Urban Areas, Primary Roads). 
+
+Whilst transformations can be used to correct non-linear relationships, it is recommended that these are only made with a valid hypothesis: attempting to make transformations for the purpose of improving model fit can introduce type I errors and also limit the interpretability of the resulting model [@Harrell2001]. It was observed within existing GIS wind turbine studies that linear relationships are primarily used. As a result, it was decided that no transformations were to be made to the dataset.
+
+Again, while these results can help indicate potential issues, it is not recommended that parameters are removed prior to the analysis based on these results. There is the potential that the interaction with other variables within the model may alter these relationships, and therefore further linearity checks are conducted within the diagnostics of the statistical modelling.
+
+----
+
+# Hierarchical Logistic Regression
+
+Summary statistics provide a useful overview of the modelling data, and can provide an indication of issues which may warrant further exploration. Table \@ref(tab:SummaryStatistics) presents the statistics for the numeric variables within the model. It can be seen that the geospatial proximity to features used within the study vary significantly in their range. For example, the maximum distance a wind energy project is from *Urban Regions* is `r max(df_turbine$UrbanRegions) %>% round(., 1)`km while *Heritage Coast* has a range of `r max(df_turbine$HCoast) %>% round(., 1)`km. Such a large difference in range can create difficulty in interpreting results, as a unit change of 1km has a much larger impact on the *Urban Region* parameter than *Heritage Coast*.
+
+While previous studies have transformed the parameters to a standardized scale by using a z-score linear transformation [@VanRensburg20], it was decided that they would be left unaltered within approach: such a transformation provides no direct benefit to the model other than to allow a direct comparison to be made between the influence of parameters. In addition, model parameters create additional complication in the generalisation of the model results as models must transformed to the adjusted z-score scale to allow for comparison [@Harrell2001, p.123].
+
+
+Some minor amendments were made to the dataset before the modelling to ensure the suitability for modelling:
+
+```{r renameDF}
+df_turbine <- df_turbine_trunc
+```
+
+## Model 1: Physical attributes of the plant
+
+This is based on some of the physical attributes of the wind turbines proposed. This includes the number of wind turbines of the site, and the turbine capacity which can be used to indicate the turbine size. The model initially included the overall wind farm capacity, however it was found that this was this was highly collinear with the number of turbines on the site. The capacity was therefore removed to reduce this influence on the model.
+
+```{r model1_build, echo = TRUE}
+# Make blank object to store results
+wind_models <- NULL
+variables_model_1 <- c("No..of.Turbines", "Turbine.Capacity..MW.")
+wind_models$No1 <- glm(Status.Summary ~ No..of.Turbines + Turbine.Capacity..MW.,
+                       data = df_turbine,
+                       family = binomial())
+
+
+(summary_model1 <- summary(wind_models$No1)) # Print Results
+```
+
+```{r model1_diagnostics, echo = TRUE}
+# Check Diagnostics
+LogisticDiagnostics(wind_models$No1)
+```
+
+The Pseudo $R^{2}$ values highlight the relatively low level of the model. There are no issues with collinearity of the two variables or autocorrelation from the Durbin Watson Test.
+
+```{r model1_linearity, echo = TRUE}
+# Check Linearity of variables against logit
+LogisticModelInt(variables_model_1, "Status.Summary", df_turbine)
+```
+
+The logarithmic transformations are not statistically significant, which suggest that there are no issues with the linearity. 
+
+## Model 2: Developer Parameters
+
+The second model considers parameters which may be of interest to a developer, such as the site wind speed, proximity to powerlines and urban areas.
+
+```{r model2_build, echo =TRUE}
+# Add variables to parameter List
+variables_model_2 <- ParameterUpdate(input = variables_model_1, add = c("WindSpeed45", "HVpowerline"))
+wind_models$No2 <- LogisticModel(variables_model_2, df_turbine)
+(summary_model2 <- summary(wind_models$No2))
+```
+
+```{r model2_diagnostic}
+# Diagnostics
+LogisticDiagnostics(wind_models$No2)
+```
+
+```{r model2_linearity, echo = TRUE}
+# Linearity of variables against logit
+LogisticModelInt(variables_model_2, "Status.Summary", df_turbine)
+```
+
+Results suggest that HV Powerlines should be checked as they are not linear.
+
+There is a relatively limited improvement in this model compared to the first model. Proximity to powerlines is seen as a significant parameter, however there appear to be issues with its linearity to the logit.
+
+## Model 3: Year of Application
+
+```{r model3_build, echo = TRUE}
+variables_model_3 <- ParameterUpdate(variables_model_2, add = c( "year"))
+wind_models$No3 <- LogisticModel(variables_model_3, df_turbine)
+(summary_model3 <- summary(wind_models$No3))
+```
+
+## Model 4: Proximity to Features
+
+This model builds upon the previous models to include the full list of geospatial parameters derived in the previous analysis. These provide the proximity to the nearest features and include landscape and environmental designations.
+
+
+```{r model4_build, echo = TRUE}
+variables_model_4 <- ParameterUpdate(variables_model_3, add = c( "Airports", "ARoads_Trans", "BRoads_Trans", "MinRoads_Trans", "Motorways_Trans",  "Railway_Trans", "UrbanRegions_Trans", "AONB_Trans", "NationalParks_Trans", "HCoast_Trans", "NNR_Trans", "RAMSAR_Trans", "SACS_Trans", "SPA_Trans", "SSSI_Trans", "MilitarySites_Trans"))
+wind_models$No4 <- LogisticModel(variables_model_4, df_turbine)
+(summary_model4 <- summary(wind_models$No4))
+```
+
+Check to see whether regression model adequately represents the data. 
+
+```{r model4_diagnostic}
+# Diagnostics
+LogisticDiagnostics(wind_models$No4)
+```
+
+
+```{r model4_linearity}
+# Check Linearity
+LogisticModelInt(variables_model_4, "Status.Summary", df_turbine)
+```
+
+Areas of Outstanding Natural Beauty (AONB), National Parks and SPAs are statistically significant environmental and landscape designations. However it appears that there may be issues with AoNB linearity.
+
+## Model 5: Census Variables
+
+This model adds Census data to understand whether demographic variables can be linked to the turbines. Qualifications, Age, Social Grade and Tenure were added to the model.
+
+```{r model5_build}
+
+variables_model_5 <- ParameterUpdate(variables_model_4, add = c("QualPercL4", "AgeMean", "TenureOwned"))
+
+wind_models$No5 <- LogisticModel(variables_model_5, df_turbine)
+(summary_model5 <- summary(wind_models$No5))
+
+```
+
+Check to see whether regression model adequately represents the data. 
+
+```{r model5_diagnostic, echo = TRUE}
+# Diagnostics
+LogisticDiagnostics(wind_models$No5)
+```
+
+```{r model5_linearity}
+# Linearity
+LogisticModelInt(variables_model_5, "Status.Summary", df_turbine)
+```
+
+Conclusions:
+
+- Increased levels of qualification appear to reduce the likelihood of acceptance
+- Age_Median and Mean are highlight collinear. Median value removed
+
+## Model 6: Political Parameters
+
+This adds information from local authority composition. Represents the complete model presented within the report.
+
+```{r model6_build, echo=TRUE}
+variables_model_6 <- ParameterUpdate(variables_model_5, add = c("Con_share", "Lab_share", "LD_share"))
+# Could add "SNP_PC_sha"
+wind_models$No6 <- LogisticModel(variables_model_6, df_turbine)
+(summary_model6 <- summary(wind_models$No6))
+
+```
+
+
+```{r model6_diagnostic, echo =TRUE}
+# Diagnostics
+LogisticDiagnostics(wind_models$No6)
+```
+
+## Model 7: Cumulative Development
+
+This includes parameters which indicate how site the planning permission was to other sites at the time of the application.
+
+```{r model7_build, echo=TRUE}
+variables_model_7 <- ParameterUpdate(variables_model_6, add = c("NearestTurbineBuilt", "NearestTurbineRejected", "UrbanLarge"), remove = "UrbanRegions")
+wind_models$No7 <- LogisticModel(variables_model_7, df_turbine)
+(summary_model7 <- summary(wind_models$No7))
+```
+Check to see whether regression model adequately represents the data. 
+
+```{r model7_diagnostic, echo = TRUE}
+# Diagnostics
+LogisticDiagnostics(wind_models$No7)
+```
+
+```{r model7_linearity}
+# Linearity
+LogisticModelInt(variables_model_7, "Status.Summary", df_turbine)
+```
+
+```{r model7_oddsplot}
+LogisticOddsPlot(wind_models$No7, Title = "Logistic Odds Plot Full Model")
+```
+
+# Save Tables
+
+Save results for use within the full report.
+
+```{r LogisticModelsResults}
+# Build the results tables to compare the models
+list_models <- list(wind_models$No1, wind_models$No2, wind_models$No3, wind_models$No4, wind_models$No5, wind_models$No6, wind_models$No7)
+
+# Run the Above functions
+model_results <- LogResultsTable(wind_models$No1, wind_models$No2, wind_models$No3, wind_models$No4, wind_models$No5, wind_models$No6, wind_models$No7)
+
+# Calculate the Model accuracy
+foldSize <- 0.05
+model_acc <- lapply(list_models, function(x) ModelAccuracyFromModel(x, df_turbine_trunc, iterations = 50, foldSize = foldSize)) %>%
+  as.data.frame() %>%
+  set_rownames("Accuracy") %>%
+  set_colnames(paste("Model", seq(1, length(list_models))))
+
+model_results <- rbind(model_results, model_acc) 
+
+# Make footnote show how accuracy was derived
+footnote <-  paste0("Accuracy assessed by internal validation using a random sample of ", foldSize*100, "% with 200 iterations.")
+  
+knitr::kable(model_results, 
+             format = "latex",
+             caption = "A summary of the hierarchical logistic regression models",
+             booktabs=TRUE,
+             linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("hold_position", "scale_down")) %>%
+  kableExtra::add_footnote(label = footnote)
+```
+
+# Parsimonious Model
+
+The hierarchical approach considered the full list of model variables, resulting in a relatively complex model. However, it can be seen that a large proportion of these variables have a low estimate value and statistical significance, and their inclusion provides minimal improvement to the model fit. Before advanced optimisation techniques were considered, the number of model parameters was reduced to create a parsimonious model.^[A parsimonious model is a model that accomplishes a desired level of explanation or prediction with as few predictor variables as possible]
+
+The backward elimination technique was used to develop parsimonious models. In this approach, all candidate variables are included within the model, and the deletion of each variable is tested using a chosen model fit criterion, deleting the variable (if any) whose parameter results in the least deterioration in the model fit. This process is repeated until no further variables can be deleted without a statistically significant loss of fit [@Hosmer2004].
+
+```{r optimiseModel}
+Dataframe <- df_turbine_trunc[, match(c("Status.Summary", variables_model_7) ,names(df_turbine_trunc))]
+Dataframe <- Dataframe[complete.cases(Dataframe),]
+
+# Rebuild the general model. There is an issue with `step` working with models produced using formula
+
+fullModel <- glm(Status.Summary ~ No..of.Turbines + Turbine.Capacity..MW. + WindSpeed45 + 
+    HVpowerline + year + Airports_Trans + ARoads_Trans + BRoads_Trans + 
+    MinRoads_Trans + Motorways_Trans + Railway_Trans + UrbanRegions_Trans + 
+    AONB_Trans + NationalParks_Trans + HCoast_Trans + NNR_Trans + 
+    RAMSAR_Trans + SACS_Trans + SPA_Trans + SSSI_Trans + MilitarySites_Trans + 
+    QualPercL4 + AgeMean + TenureOwned + Con_share + Lab_share + 
+    LD_share + NearestTurbineBuilt + NearestTurbineRejected + 
+    UrbanLarge, data = df_turbine, family = stats::binomial())
+
+
+model_pars <- stats::step(fullModel, direction = "backward", trace = 0)
+variables_pars <- broom::tidy(model_pars)[-1, 1] 
+model_pars_Summary <- LogResultsTable(model_pars)
+```
+
+```{r parsimoniousResults}
+fullResultsTable <- LogisticResultsTable(wind_models$No7) %>%
+  mutate(Variable = matchNames(Variable)) %>%
+  dplyr::filter(Variable != "")
+```
+
+```{r LogOddsPlotPars, echo=FALSE, fig.asp=0.4, fig.cap="(ref:LogOddsPlotParsCap)"}
+OddsPlotPars <- LogisticOddsPlot(model_pars, Sort = FALSE, Title = "")
+OddsPlotPars
+```
+
+# Split Data Models
+
+It was hypothesised that the parameters influencing the planning acceptance of wind energy may vary between countries within Great Britain. England, Scotland and Wales have varying demographics and population densities as well as differing institutional support from national governments, with Scotland placing a greater emphasis on the development of onshore wind. It can also be seen that existing planning acceptance rates are lower in England than in Scotland and Wales. However, the global model presented was not able to account for any regional variation in relationships.
+
+Where significant variation is expected within subgroups, split data models are recommended, whereby the dataset was segmented into groups based on model variables, and regression models were fitted to each subgroup. Whilst a dummy variable could also be considered, such an approach only captures the *level* effect and not the *slope* effect, and therefore only allows for limited variability between the subgroups. A split data approach was therefore developed using the Country variable, creating three separate models for England, Scotland and Wales respectively. 
+
+
+```{r BuildNestedModels, include=FALSE}
+variables_pars <- variables_pars[variables_pars != "SNP_PC_sha"]
+
+# Uses a range of custom functions within "Segmented_LogisticModelsComplete" to split data
+segmented_country <- Segmented_LogisticModelsComplete(df_turbine, "Country", variables_pars, "Status.Summary", 0.2, 1)
+
+max_wales_variables <- table(segmented_country$data$Wales$Status.Summary) %>% min() %>% divide_by(10) %>% floor
+
+# Build Optimised Parameter Models
+models_split <- NULL
+models_split$England <- FindBestModel(df = segmented_country$data$England, variables_pars)
+models_split$Scotland <- FindBestModel(df = segmented_country$data$Scotland, variables_pars)
+models_split$Wales <- FindBestModel(df = segmented_country$data$Wales, variables_pars)
+
+
+# Summarise the results
+summary_split_model <- LogResultsTable(model_pars, 
+                                         segmented_country$models$England,
+                                         segmented_country$models$Scotland,
+                                         segmented_country$models$Wales,
+                                         models_split$England,
+                                         models_split$Scotland,
+                                         models_split$Wales) %>%
+  set_colnames(c("Global", "England", "Scotland", "Wales", "England", "Scotland", "Wales"))
+
+summary_split_model <- summary_split_model[c(1:8),] # Deletes the final AIC row
+
+# Calculate Accuracy
+# The fold size for wales must be increased as there is a very small sample size
+accuracy <- c(ModelAccuracyFromModel(model_pars, df_turbine_trunc),
+              ModelAccuracyFromModel(segmented_country$models$England, segmented_country$data$England),
+              ModelAccuracyFromModel(segmented_country$models$Scotland, segmented_country$data$Scotland),
+              ModelAccuracyFromModel(segmented_country$models$Wales, segmented_country$data$Wales, foldSize = 0.15),
+              ModelAccuracyFromModel(models_split$England, segmented_country$data$England),
+              ModelAccuracyFromModel(models_split$Scotland, segmented_country$data$Scotland),
+              ModelAccuracyFromModel(models_split$Wales, segmented_country$data$Wales, foldSize = 0.15)) %>%
+  as.data.frame() %>%
+  t() %>%
+  set_colnames(names(summary_split_model)) %>%
+   set_rownames("Accuracy")
+
+# Calculate values to quote in text
+summary_split_model <- rbind(summary_split_model, accuracy)
+num_params <- summary_split_model['Parameters',] %>% t
+
+
+write.csv(summary_split_model, file = "outputs/SplitModels.csv")
+```
+
+```{r displayNestedPlot}
+segmented_country$plot
+```
+
+# Prediciting Site Suitability
+
+```{r loadRastersFunction, echo = FALSE, message = FALSE}
+
+library(raster)
+
+#' Loads Rasters into a list
+#' 
+#' @param  dir Directory of the rasters
+#' @param ls a list of names. If not specified all are loaded
+#' @param message if TRUE, it will display the loading in the message
+#' 
+LoadRaster <- function(dir, ls = NULL, message = FALSE){
+  RasterFilePaths <- NULL
+  Rasters <-as.list(NULL) # Make empty results
+  if(is.null(ls)){
+    RasterNames <- list.files(path = dir, pattern = "\\.tif$")}
+  else{
+    RasterNames <- ls
+  }
+  
+  for (i in RasterNames){
+    if (message == TRUE) cat("Loading Raster", i, " \n")
+    name <- gsub(pattern = ".tif", "", i)
+    filepath <- file.path(dir, i)
+    Raster <- raster(filepath)
+    Raster <- crop(Raster, extent(5720, 655470, 5180, 1220180))
+    Rasters[[name]] <- Raster
+  }
+  return(Rasters) # Save rasters to global environment
+}
+
+```
+
+```{r loadRasters}
+
+# Load the directory of rasters
+# These can be downloaded here:
+rasters_dir <- "C:/Rasters"
+
+# Extract parameters from model
+raster_names <- variables_pars[!variables_pars %in% c("Turbine.Capacity..MW.", "year")] %>%
+  paste0(. , ".tif")
+
+# Build a raster stack
+raster_list <- LoadRaster(dir = rasters_dir, raster_names, message = FALSE)
+raster_stack <- raster::stack(raster_list)
+rm(raster_list)
+```
+
+Spatial prediction is conducted:
+
+```{r}
+# Although there is a function designed for this purpose, it has issues working with the logistic regression model built for this analysis. A more manual approach was therefore used, converting the raster to an XY data table as follows
+grid_values <- rasterToPoints(raster_stack) %>% as.data.frame() %>% .[complete.cases(.),]
+grid_values$year <- 2015
+grid_values$'Turbine.Capacity..MW.' <- 2
+grid_values$Predicted <- predict.glm(object = model_pars, grid_values, type = 'response') # Calculate predicted values
+
+# Converted prediction into raster and reproject
+raster_predicted <- grid_values[, c(1,2, ncol(grid_values))] # Summarise dataset into XYZ table
+raster_predicted <- suppressWarnings(raster::rasterFromXYZ(raster_predicted))
+crs(raster_predicted) <- crs(raster_stack)
+
+# Realign extents and add Predicted raster to stack
+raster_stack <- crop(raster_stack, raster_predicted)
+raster_stack <- stack(raster_predicted, raster_stack)
+rm(raster_stack)
+
+writeRaster(raster_predicted, "outputs/PredictedRaster.tif", overwrite = TRUE)
+```
+
+# Finish
+
+Some R objects are saved to the file to allow them to be access by the full report.
+
+```{r cacheResults}
+# save tables for report
+write.csv(model_results, file = "tables/modelResults.csv")
+
+save(segmented_country, summary_split_model, model_pars, wind_models,
+     model_pars_Summary, model_results, fullResultsTable, OddsPlotPars,
+     file = "outputs/codeOutputs.RData")
+```
+
+
+-----
+
+# System Information {-}
+
+The analysis was completed using the following environment configuration:
+
+```{r systemInfo}
+sessionInfo()
+```
+
+# Bibliography {-}
+
+```{r writebib, include=FALSE}
+knitr::write_bib(x =c("tidyverse", "caret", "corrplot", "ggplot2", "magrittr", "Hmisc", "broom", "car", "plyr", "psych", "stats", "ggthemes", "grid", "DiagrammeR", "rsvg", "DiagrammeRsvg", "scales", "knitr", "rmarkdown", "WindAnalysis"), file = "_bib/packages.bib")
+```

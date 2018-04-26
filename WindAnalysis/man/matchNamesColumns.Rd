@@ -4,10 +4,12 @@
 \alias{matchNamesColumns}
 \title{Checks the row names against the variable full names}
 \usage{
-matchNamesColumns(dataframe, dropNA = TRUE)
+matchNamesColumns(dataframe, displayNamesDF, dropNA = TRUE)
 }
 \arguments{
 \item{dataframe}{a list of names which are to looked up}
+
+\item{displayNamesDF}{the path of the reference file}
 
 \item{dropNA}{a TRUE/FALSE selection whether names should be dropped if empty}
 }

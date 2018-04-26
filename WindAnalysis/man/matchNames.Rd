@@ -5,12 +5,12 @@
 \title{Matches variable names with their full descriptive name.
 Used when plotting or showing results in a table}
 \usage{
-matchNames(inputNames, path = "VariableDisplayNames.csv")
+matchNames(inputNames, displayNamesDF = WindAnalysis::displayNamesDF)
 }
 \arguments{
 \item{inputNames}{a list of names which are to looked up}
 
-\item{path}{the filepath of the lookup file}
+\item{displayNamesDF}{the filepath of the lookup file}
 }
 \description{
 This function is designed to work with the PhD project

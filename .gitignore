@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+_temp/
+Paper_cache/
+Paper_files/

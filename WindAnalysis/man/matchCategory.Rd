@@ -10,7 +10,7 @@ matchCategory(inputNames, path = "VariableDisplayNames.csv")
 \arguments{
 \item{inputNames}{a list of names which are to looked up}
 
-\item{path}{the filepath of the lookup file}
+\item{displayNamesDF}{the filepath of the lookup file}
 }
 \description{
 This function is designed to work with the PhD project
