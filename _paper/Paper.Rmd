@@ -3,17 +3,11 @@ title: "Onshore wind and the likelihood of planning acceptance: learning from a 
 author: "Michael Harper, Ben Anderson, Patrick James, AbuBakr Bahaj"
 output: 
   bookdown::pdf_book:
-    citation_package: natbib
     number_sections: true
     keep_tex: true
     toc: FALSE
-    pandoc_args: ["--wrap", "none"]
-  bookdown::word_document2:
-    toc: FALSE
-bibliography: [bibliography.bib]
-csl: ../csl/elsevier-harvard.csl
+bibliography: [bibliography.bib, software.bib]
 link-citations: true
-bibliographystyle: elsarticle-harv
 papersize: a4
 always_allow_html: yes  
 ---
@@ -626,7 +620,6 @@ The data and supporting analysis are made available as supplementary data for th
 knitr::write_bib(x = c("knitr", "rmarkdown", "raster", "base"), file = "software.bib")
 ```
 
-<!---
 # References {-}
 
 \let\oldhypertarget\hypertarget
@@ -637,7 +630,7 @@ knitr::write_bib(x = c("knitr", "rmarkdown", "raster", "base"), file = "software
 }
 
 <div id="refs"></div>
---->
+
 
 \newpage
 ```{r message=FALSE, warning=FALSE}
@@ -656,8 +649,4 @@ knitr::kable(read.csv("../_data/ParameterTable.csv", check.names = FALSE),
     "AB represents Higher and intermediate managerial, administrative, professional occupation"))
 ```
 
-<!---
-http://data.parliament.uk/writtenevidence/committeeevidence.svc/evidencedocument/business-energy-and-industrial-strategy-committee/clean-growth-strategy/oral/74989.html
-http://www.alphr.com/energy/1008375/uk-renewable-energy-progress-2020
-https://www.gov.uk/government/speeches/ending-new-subsidies-for-onshore-wind
---->
+
