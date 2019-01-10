@@ -5,3 +5,5 @@
 _temp/
 Paper_cache/
 Paper_files/
+**/.DS_Store
+_data/Rasters/*

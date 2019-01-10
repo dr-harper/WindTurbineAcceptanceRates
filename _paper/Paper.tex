@@ -1,0 +1,698 @@
+\documentclass[a4paper,]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Onshore wind and the likelihood of planning acceptance: learning from a Great Britain context},
+            pdfauthor={Michael Harper, Ben Anderson, Patrick James, AbuBakr Bahaj},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Onshore wind and the likelihood of planning acceptance: learning from a Great Britain context}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Michael Harper, Ben Anderson, Patrick James, AbuBakr Bahaj}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{solution}{Solution}
+\begin{document}
+\maketitle
+
+\hypertarget{abstract}{%
+\subsection*{Abstract}\label{abstract}}
+\addcontentsline{toc}{subsection}{Abstract}
+
+Geospatial modelling is extensively used to identify suitable sites for the installation of onshore wind turbines, with the starting point being the estimate of exploitable resource. However, there are concerns that such approaches do not accurately consider the social issues surrounding such projects, resulting in large numbers of projects subsequently being rejected at the planning permission stage. Using the location of 1721 historic wind turbine planning applications in Great Britain, this paper explores whether the planning success of proposed wind turbine projects can be better predicted using a range of geospatial, social and political parameters. The results indicate that the size of the project, local demographics and the proximity to existing wind turbines are key influences affecting planning approval. The paper demonstrates that quantitatively linking local social and political data enhances the prediction of the planning outcome of wind turbine proposals, and highlights that geospatial parameters are necessary but in isolation, not sufficient for assessing the suitability of potential sites. These results also suggest that national policy is restricting the development of onshore wind energy in regions which appear generally supportive of wind energy.
+
+\hypertarget{keywords}{%
+\subsection*{Keywords}\label{keywords}}
+\addcontentsline{toc}{subsection}{Keywords}
+
+Onshore Wind, Logistic Regression, Planning, Demographics, Great Britain, GIS
+
+\textbf{Word Count}: 6844
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+Concerns over security of energy supply and carbon emissions from-fuelled electricity generation have led to a global drive to develop renewable energy systems. Over \$40 billion is invested annually within the European Union, with this figure expected to exceed \$60 billion by 2020 \citep{UNEP2016}.
+
+While many renewable energy technologies are available, onshore wind is one of the most established technologies and offers one of the least-cost options for renewable energy supply. For example, the cost projections for new onshore wind projects in Great Britain (England, Scotland \& Wales) in 2020 are projected to be between £47-76/MWh, a price which competes with conventional fossil-fuel technologies \citep{DBIES2016}. This economic viability is coupled with a high resource availability, with Great Britain and many other European nations having a large exploitable wind resource \citep{EuropeanEnvironmentAgency2009}.
+
+Despite the strengths of onshore wind energy, widescale deployment of the technology is restricted due to local and national consent processes. Proposals often face local opposition, with visual impact, noise, site access and ecological impacts frequently cited as reasons for objection \citep{Wolsink2000, Langer2016}. These planning challenges are particularly evident in the United Kingdom, where 52\% of historic onshore wind projects have been refused permission or are abandoned by the developer \citep{DECC2018}. As highlighted in Figure \ref{fig:acceptanceRates}, this rate is the highest rejection rate for a renewable energy technology in Great Britain.
+
+
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/figure1} 
+
+}
+
+\caption{Acceptance rates of renewable energy projects within the Great Britain between 1991 and 2017. The analysis only considers technologies which have had more than 50 planning applications.}\label{fig:acceptanceRates}
+\end{figure}
+
+Great Britain is not alone in encountering opposition to wind turbine projects \citep{Langer2016}, but is perhaps unique in how policy has been restructured to restrict it, with recent changes in legislation severely impacting the further development of onshore wind. Until June 2015, the planning decision for projects greater than 50MW was controlled at a national level. This provision was removed by the \emph{Energy Act 2016 cl 78} and \emph{Infrastructure Planning (Onshore Wind Generating Stations) Order 2016}, which provided local authorities with the final say for all onshore wind energy projects and only allows wind turbines to be proposed in sites which have been identified within neighbourhood development plans. These changes have effectively provided local communities with a veto to block the development of wind turbines \citep{Cowell2018}.
+
+In addition to alterations in planning law, there have been changes to the financial mechanisms used to support low-carbon energy in Great Britain. Firstly, onshore wind projects were removed from the Renewable Obligation scheme on 1st April 2016 under the \emph{Energy Act 2016} cl 79. Further to this, onshore wind projects are prevented from bidding in the £557 million round of Contract for Differences auctions scheduled for Spring 2019 \citep{Smith2016}. Both these financial changes have in effect restricted on the development of onshore wind energy.
+
+As a result of these planning and financial changes, there has been a dramatic reduction in the development of onshore wind within Great Britain. In June 2015, the month the changes in planning were implemented, there were 133 planning applications for onshore wind, a record high for a single month \citep{DECC2018}. In contrast, for the entire year of 2017, there were only 52 planning applications made, representing only 6\% of the 2015 total. This reduction in planning is highlighted in Figure \ref{fig:numberApplications}.
+
+
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/figure2} 
+
+}
+
+\caption{Number of turbine planning applications submitted in the United Kingdom per month between January 2013 and December 2017.}\label{fig:numberApplications}
+\end{figure}
+
+Whilst the predicted reduction of cost in onshore wind may soon overcome the remaining financial barriers, the planning changes currently remain as a major barrier to increased deployment. However, there have been recent suggestions to soften the stance in planning to allow development of projects in regions accepting of wind, most notably in Scotland and Wales (\emph{Clean Growth Strategy/Outcomes of Bonn COP23, HC 596/597}). In addition, the public approval of onshore wind in Great Britain reached a record high of 76\% in April 2018 \citep{DBIES2018}. This therefore highlights the need to consider the influence of local communities within the proposals of onshore wind projects and understand characteristics which may be associated with project rejection.
+
+There is an established precedent of using geospatial parameters to assess the site suitability of onshore wind \citep{Voivontas1998, Baban2001}. This paper seeks to understand if existing geospatial modelling of onshore wind can account for the low levels of acceptance of onshore wind in Great Britain (Figure \ref{fig:acceptanceRates}) and then tests the extent to which existing social and demographic parameters can be used to enhance acceptance rate prediction for a site.
+
+\hypertarget{background}{%
+\section{Background}\label{background}}
+
+The background covers three key sections of literature. Firstly, a review of existing geospatial models is provided to understand how suitable sites for onshore wind are determined. Issues relating to the social acceptance of wind turbine are then presented to highlight the broader social influences relating to onshore wind energy. Finally, statistical techniques used to understand acceptance rates of wind energy projects are reviewed.
+
+\hypertarget{GIS}{%
+\subsection{Geospatial modelling of onshore wind}\label{GIS}}
+
+To assist in the development of onshore wind energy, many geospatial methodologies have been produced to determine site suitability for wind farms. Development primarily started in the late 1990s \citep{Voivontas1998, Baban2001}, and established a structure which has since been applied extensively internationally \citep{Hansen2005, Yue2006, Lee2009, Janke2010, SQWEnergy2010, Aydin2010, VanHaaren2011, Sliz-Szkliniarz2011, Gass2013, Neufville2013, Miller2014, Wang2014, Watson2015, Noorollahi2015, Atici2015, Baseer2017, Gigovic2017, Mentis2017, Manomaiphiboon2017, Liu2017, Kazak2017}. These methodologies combine geospatial modelling with Multi-criteria Decision Analysis (MCDA) techniques, whereby various spatial attributes are combined into a single scoring criteria to identify sites which are deemed suitable for development \citep{Malczewski2004}. Ideal sites are typically identified as those which have good economic viability, are not in areas where development is prohibited and have minimal impact on local communities. Although the parameters vary for studies, suitable sites for development will usually be determined as: 1) \emph{having high average wind speeds}; 2) \emph{not being close to urban areas}; 3) \emph{not being in protected landscapes} (e.g.~National Parks); 4) \emph{not close to airports} (to minimise radar interference); 5) \emph{close to roads} (for site access) and 6) \emph{close to power lines} (for grid connection).
+
+Whilst models are typically based of an implicit assumption that geospatial parameters can be used to determine suitable sites, there are concerns that geospatial parameters in isolation are in themselves insufficient to explain patterns of development of wind turbines \citep{VanderHorst2010, Toke2005}. In particular, it is argued that modelling approaches are unable to fully capture the social barriers surrounding the development of onshore wind energy \citep{Langer2016}. This gap between modelling and development can be highlighted by Figure \ref{fig:acceptanceRatesWind}, which shows that despite widespread interest in modelling the site suitability of onshore wind farms in the UK, there has been an continuing decrease in the likelihood of wind turbines receiving planning permission.
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/figure3} 
+
+}
+
+\caption{Annual average acceptance rate of wind turbine projects within Great Britain, 1990 to 2017. Line shows polynomial fitted relationship.}\label{fig:acceptanceRatesWind}
+\end{figure}
+
+Whilst some studies compare the resulting suitability maps with locations of operational wind turbines \citetext{\citealp{Watson2015}; \citealp{Miller2014}; \citealp[;][]{Gass2013}; \citealp{VanHaaren2011}; \citealp{Aydin2010}}, these were largely used only as a form of discussion, and the information was not directly used to develop or revise the models. This overlooks a valuable contribution that existing sites could provide in understanding whether there are any spatial development patterns which can be identified. In particular, Watson \citeyearpar{Watson2015} noted ``\emph{operational wind farms in South Central England were predominantly located in areas suggested to be of lower suitability}'', suggesting that the proposed model inaccurately assessed site suitability in the region.
+
+In situations where there is a large enough sample of similar historical spatial decisions, an ``\emph{Inverse theory}'' approach can be applied to determine subjective valuation of criteria by stakeholders \citep{Cirucci2014}. Compared to the traditional ``\emph{Forward theory}'' approach of geospatial modelling (Figure \ref{fig:InverseGIS}a), an inverse approach assesses the existing spatial distribution of projects to determine the most influential parameters in determining site success (Figure \ref{fig:InverseGIS}b). Such an approach has been used successfully within both public health studies \citep{Brody2002, Mohamed2004, Yamada2009, Garcia-Ayllon2013} and infrastructure location decision-making \citep{USEPA2002, Cirucci2015} to determine optimal sites for development. However, there have been no examples identifed of this approach being used within onshore wind energy modelling.
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/figure4} 
+
+}
+
+\caption{Comparison of Forward and Inverse GIS MCDA model structures}\label{fig:InverseGIS}
+\end{figure}
+
+\hypertarget{acceptance}{%
+\subsection{Social acceptance of wind turbines}\label{acceptance}}
+
+Traditional onshore wind GIS models focus on identfying sites which meet technical and legislative criteria. However, there is a crucial difference between what makes a site acceptable in a planning sense, and what is acceptable to the local community. This has prompted research to assess the factors which influence the public acceptance of onshore wind turbines \citep{Langer2016}. Although several definitions are provided \citep[p.~107]{Upham2015}, the definition of social acceptance adopted within this study is:
+
+\begin{quote}
+``a favourable or positive response (including attitude, intention, behaviour and - where appropriate - use) relating to proposed or in situ technology or social technical system by members of a given social unit (country or region, community or town and household, organisation)''.
+\end{quote}
+
+Social acceptance parameters are summarised into three groups 1): \emph{Physical and Environmental}; 2) \emph{Pyscho-social} and 3) \emph{Social and Institutional} \citep{Langer2016}. Stated-preference surveys are frequently used to assess the views of individuals against wind energy and identify factors which create positive or negative perceptions of projects, with the key findings outlined below.
+
+A concept consistently investigated within empirical research is the \emph{``proximity hypothesis''}, which states that those living closest to a wind farm will have the most negative perceptions of it \citep{Devine-Wright2005, Warren2005}. However, attempts to prove this hypothesis have largely proved unsuccessful, with conflicting results. For example, evidence from Denmark suggests no link between proximity of residential properties to the nearest turbine and negative public perceptions, with suggestions that respondents living closest (i.e.~within 500 metres) actually had more positive perceptions in comparison with individuals living away from turbines \citep{Krohn1999}. This view was further supported by a study in Cornwall, UK, which found that local communities with visibility of the turbines were generally more supportive of wind turbines \citep{Eltham2008}. However, several studies have reported the opposite relationship \citep{Meyerhoff2010, Ladenburg2008}, with the studies finding that negative perceptions increased with proximity to wind energy developments, althought these studies explored smaller sized turbines along with different national contexts, and therefore may capture different results.
+
+Literature has also sought to understand the potential cumulative effects that wind turbines have, as projects are frequently refused planning in regions already containing wind turbines \citep{Strachan2004, Jones2011, Eltham2008}. However, there is limited understanding of how neighbouring wind energy projects may alter the likelihood of nearby wind turbine projects receiving planning, and current research has focussed on smaller case studies \citep{Jones2011}.
+
+It has also been highlighted within literature that psycho-social factors have become crucial dimensions to explain how local communities interact with, and react to, new wind farm developments \citep{Langer2016, Scherhaufer2017}. The effects of socio-demographic variables on individuals' views of wind farms have also been studied \citep{Devine-Wright2005, Warren2010}, with 1) \emph{age}; 2) \emph{gender}; 3) \emph{experience with wind farms} and 4) \emph{use of the land} found to be slightly correlated with the attitudes towards wind power \citep{Warren2010}.
+
+Empirical findings also suggest that political beliefs are correlated with social acceptance of different low carbon technologies \citep{Devine-Wright2007}. The shift towards anti-onshore wind was a key manifesto commitment of the Conservative Party in the 2015 general election, and previous surveys indicate that only 62\% of individuals who indicated support for the UK Conservative Party were also supportive of new renewable energy developments, compared to 86\% and 84\% for Labour and Liberal Democrats respectively \citep{Populus2005}.
+
+Studies have highlighted that the interaction of developers with local communities are also key indicators of positive planning approval outcomes \citep{Toke2005, Devine-Wright2005a, Wustenhagen2007}. People are generally more supportive when projects seek greater consultation and community interaction within their plans, compared to those which are fixed prior to consultation with the local population.
+
+Finally, the ownership structure of a project has been indicated to be a significant influence on the level of public acceptance \citep{Sonnberger2017, Haggett2006}. Projects are generally seen as more favourable when owned by local energy cooperatives rather than by a large energy company or investor with no local connections and has been suggested as a major factor explaining the differences in project success between the United Kingdom and Germany \citep{Toke2008}.
+
+\hypertarget{planning-acceptance-of-wind-energy-projects}{%
+\subsection{Planning acceptance of wind energy projects}\label{planning-acceptance-of-wind-energy-projects}}
+
+Whilst studies have aimed to understand the social acceptance of onshore wind turbines at an individual level, it is more beneficial to planners and developers to understand how these influence the overall planning acceptance of a wind energy project. There has been increased use of quantitative analysis to understand the effect social and institutional parameters have on the outcome of wind energy planning outcomes, with four key studies being identified \citep{Toke2005, VanderHorst2010, VanRensburg20, Roddis2018}. Such approaches build upon the understandings provided within the qualitative analysis explained with Section \ref{acceptance}, but aim to identify key parameters and their influence on the chance of a turbine receiving planning permission.
+
+A key determinant in the statistical power of the models is the number of planning applications used within their models. The listed studies used samples sizes of 51 \citep{Toke2005}, 77 \citep{VanderHorst2010} 354 \citep{VanRensburg20} and 1324 \citep{Roddis2018} wind energy projects respectively. These samples sizes influenced the suitability of the modelling used: where a small sample size was used, the analysis used univariate analysis to assess the influence of each parameter individually, with logistic regression being used to assess each independent variable individually \citep{Toke2005, VanderHorst2010}. Where larger sample sizes are available multiple regression model approaches were used, with probit \citep{VanRensburg20} and logistic regression \citep{Roddis2018} methods being applied.
+
+The studies explored the influence of social, demographic, poltical and institutional parameters identified within the previous qualitative analysis, although the scope of these parameters included varied between studies. Toke \citep{Toke2005} assessed how planning outcomes were influenced by the views of key actors within the planning process of wind energy, including local councils, planning authorities and landscape protection groups. Van der Horst and Toke \citeyearpar{VanderHorst2010} focussed on local characteristics relating to education, health, demography, employment. Van Rensburg et al.~\citep{VanRensburg20} assessed project technology, institutional processes and site endowment parameters. Finally, Roddis et al.~\citep{Roddis2018} developed a similar model as previously developed by the authors \citep{Harper2017}, using 26 parameters including technical, aesthetic and local characteristics, but with a focus on community acceptance of projects instead of planning approval.
+
+Several key influential paremeters were identified across different parameter groups. For socio-demographics, it was shown that planning acceptance rates were closely associated with the high levels of apprehension about such schemes amongst people living in the immediate vicinity, highlighting the importance that social influences have on planning acceptance \citep{Toke2005}. Several strong associations were identified for planning refusal, including 1) \emph{voter turnout} and 2) \emph{years of potential life lost} (a measure of premature mortality). It was also noted that wind energy appears to generally be more likely to receive planning permission in deprived areas, with developers ``\emph{keen to avoid relatively privileged communities and target areas where people are thought to less likely put up a fight}'' \citep[p.220]{VanderHorst2010}.
+
+Van Rensburg et al.~\citeyearpar{VanRensburg20} indicated that 1) \emph{proximity to Natura 2000 sites} (a protected landscape under the European Union); 2) \emph{sites with high bird sensitivity}; 3) \emph{hub height} and 4) \emph{project capacity} were key indicators to project success. In addition, the study noted that proximity of the nearest dwellings and wind speeds appeared insignificant, which is counter to the view reported within many geospatial models which aim to locate wind turbines distant to towns and cities.
+
+Roddis et al.~\citep{Roddis2018} reported 8 parameters as being significant in influencing the planning acceptance of projects. These include the 1) \emph{proximity to National Parks}; 2) \emph{Project Size} and 3) \emph{Social deprivation}. Interestingly, the study reports contrasting results to previous research \citep{VanderHorst2010}, with it being reported that areas of low deprivation appeared more likely to be accepting of onshore wind energy projects.
+
+The studies by Van Rensburg et al.~\citeyearpar{VanRensburg20} and Roddis et al.~\citeyearpar{Roddis2018} attempted to produce an overall statistical model to predict the likelihood of a wind turbine receiving planning acceptance. Of the variables included within these models provided an adjusted R\textsuperscript{2} value of 0.31 and 0.26 respectively.
+
+\hypertarget{developing-integrated-site-suitability-assessment-models}{%
+\subsection{Developing integrated site suitability assessment models}\label{developing-integrated-site-suitability-assessment-models}}
+
+Given the prevalence of GIS modelling in determining suitable sites, and the relatively high level of rejection of projects within the UK, it is argued that there a need to understand how geospatial parameters influence the acceptance rates of projects. The studies referenced in Section \ref{GIS} have suggested a relationship between local demographic and social attributes and wind turbine planning acceptance rates, yet none attempted to integrate these findings into their site suitability tools beyond the use of proximity buffers around urban areas. This omission means that social dimensions have generally not been factored in to assessments of the suitability of sites for onshore wind development.
+
+Responding to calls to combine qualitative and quantitative research \citep[p.256]{Langer2016}, this paper presents analysis which assesses parameters that influence wind turbine planning outcomes, utilising a range of physical, geographical, demographic and political parameters. Building upon the existing quantitative studies \citep{Toke2005, VanderHorst2010, VanRensburg20, Roddis2018}, the work reported extends current knowledge through the use of a larger number of site consent applications (n = 1,721) and a broader range of geospatial parameters than has previously been the case.
+
+\hypertarget{material-and-methods}{%
+\section{Material and methods}\label{material-and-methods}}
+
+The overall methodology is highlighted in Figure \ref{fig:Methodology}, with a detailed explanation provided in the following subsections. This approach expands upon the methodology previously developed by the authors \citep{Harper2017, Harper2018}. The analysis and report was written using the R programming language \citep{R-base} and R Markdown \citep{R-rmarkdown}, with the full statistical analysis and turbine dataset provided with the supporting files to allow for the results of a the analysis to be reproduced.
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.75\linewidth]{../_figures/Flowchart/ResearchApproach} 
+
+}
+
+\caption{Research methodology to analyse patterns in onshore wind acceptance rates.}\label{fig:Methodology}
+\end{figure}
+
+\hypertarget{study-scope}{%
+\subsection{Study scope}\label{study-scope}}
+
+The study was conducted across Great Britain (England, Scotland \& Wales). These regions were chosen due to the broadly similar categorisation of land types, nature designation, data availability and legislation across these regions \citep{HMGovernment2014}. The Shetland Islands were excluded from the analysis as their geographic isolation and distance from mainland Britain created issues in generalising the model results.
+
+\hypertarget{wind-turbines-dataset}{%
+\subsubsection{Wind turbines dataset}\label{wind-turbines-dataset}}
+
+Information for turbine planning applications was collected through the Renewable Energy Planning Database (REPD) \citep{DECC2018}. Although planning applications detail are available until March 2018, projects were only considered up until December 2015; the time at which the recent financial and planning changes were made. Detailed information for each planning application includes 1) \emph{location}; 2) \emph{year of application}; 3) \emph{number of turbines}; 4) \emph{turbine capacity} and 5) \emph{planning decision}.
+
+The database includes detailed planning information with the planning status. To simplify the use within the statistical modelling, this status was summarised into a dichotomous variable with the variables: 1) \emph{Approved} (Application Granted/Under Construction/Appeal Granted/Operational/Decommission) and 2) \emph{Refused/Abandoned} (Application Refused/Appeal Withdrawn/Abandoned). The spatial distribution of these two groups of sites is shown in Figure \ref{fig:StudyExtent}.
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/figure6} 
+
+}
+
+\caption{Location of onshore wind energy planning applications used within the study. Location data extracted from the Renewable Energy Planning Database (REPD) [DECC, 2018]}\label{fig:StudyExtent}
+\end{figure}
+
+\hypertarget{model-layers-data}{%
+\subsubsection{Model layers data}\label{model-layers-data}}
+
+Building upon the literature review in Section \ref{background}, data sources were identified for physical, environmental and social parameters at each turbine location which had been indicated to influence wind turbine planning applications. A summary of the variables is provided in Table \ref{tab:SummaryTable} and discussed below, with a full details provided within the Technical Appendix A. Of the most comparable work \citep{Roddis2018}, this study used a total of 30 parameters, 11 of which were common to both studies. These layers were categorised as follows:
+
+\begin{table}[t]
+
+\caption{\label{tab:SummaryTable}Parameters considered within model}
+\centering
+\begin{threeparttable}
+\begin{tabular}{ll}
+\toprule
+Category & Variable\\
+\midrule
+Turbine & Wind Turbine Planning Data\\
+ & Turbine Capacity\\
+ & Number of Turbines\\
+ & Year\\
+ & Country\\
+Resource & Wind Speed\\
+Features & Airports\\
+ & Roads\textsuperscript{a}\\
+ & Railways\\
+ & Urban Areas\\
+ & HV Powerlines\textsuperscript{b}\\
+ & Military Sites\\
+Landscape & Areas of Outstanding Natural Beauty\\
+ & National Parks\\
+ & Heritage Coast\\
+Nature & Special Protection Areas\\
+ & National Nature Reserve\\
+ & Sites of Special Scientific Interest\\
+ & Special Areas of Conservation\\
+Geographic & Elevation\\
+ & Slope\\
+Census & Level of Qualification\textsuperscript{c}\\
+ & Age\\
+ & Social Grade\textsuperscript{d}\\
+ & Tenure\\
+Political & Conservatives\\
+ & Labour\\
+ & Liberal Democrat\\
+Proximity & Nearest Turbine (Operational)\\
+ & Nearest Turbine (Rejected)\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item[a] Roads are broken into four main categories: Motorways, A Roads, B Roads and Minor Roads
+\item[b] High Voltage network from 132 kV to 400 kV
+\item[c] L4 represents degree level or above
+\item[d] AB represents Higher and intermediate managerial, administrative, professional occupation
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wind Resource}: wind speeds were taken from the Numerical Objective Analysis of Boundary Layer (NOABL) wind speed database. This provides estimated annualised wind speed at 45m elevation at a resolution of 1km grid \citep{DTI2001}.
+\item
+  \textbf{Landscape Features}: Physical features including roads, railways and urban areas were collected from OS Strategi \citep{Survey2016}. The electricity transmission network, military sites and airport locations (civil and military) were extracted from Open Street Maps (OSM) \citep{Overpass2016}.
+\item
+  \textbf{Landscape and Nature}: Landscape and nature designations were collected for regions within Great Britain \citep{Pope2017}.
+\item
+  \textbf{Geographic}: Site elevation data was collected at a 25m resolution \citep{Commission2015}. This was used to calculate the gradient using the Fleming and Hoffer algorithm \citep{Fleming1979}.
+\item
+  \textbf{Demographic}: Census data was collected at the Lower Super Output Area (LSOA) and Data Zone (Scotland) for each turbine location. LSOAs and Data Zones represent regions with a population between 1000 and 3000 people \citep{OfficeforNationalStatistics}.\\
+\item
+  \textbf{Political}: Political data was collected at the local authority level for the four largest parties in Great Britain: 1) \emph{Conservatives}; 2) \emph{Labour}, 3) \emph{Liberal Democrat} and 4) \emph{Scottish National Party (SNP)} between 1990 and 2016. These parties held a sum of 95\% of council seats within Great Britain as of 2016.
+\item
+  \textbf{Cumulative local turbines}: the nearest wind turbine to the project was calculated using the location and year of planning application for each turbine.
+\end{itemize}
+
+Guidance states that that the location of wind turbines should consider sensitive birds and migratory flight paths \citep{Gove2013}. Although maps are available for parts of the study region \citep{Bright2006}, it was not possible to collect bird sensitivity maps for the whole study region. It was therefore decided to not include this data within the statistical model. However, as proposed projects are required to conduct an Environmental Impact Assessment, sites which are found to impact birds will often be abandoned before planning permission is sought, and therefore it is argued that such impacts should not influence the planning outcome.
+
+\hypertarget{data-transformations}{%
+\subsection{Data transformations}\label{data-transformations}}
+
+The data sources came as raster and vector spatial features, which were aggregated at each of the turbine locations as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Points, lines and polygons}: A spatial join was completed to find the distance to the nearest feature for each turbine. For polygon based data source, a value of 0km denotes the turbine is within the feature. Left censoring was used to limit the maximum distance of geospatial relationships to 30km, which is recommended within literature as the maximum typical distance at which the visual interference of wind turbines should be considered \citep{SNH2009}.
+\item
+  \textbf{Tabular}: corresponding political and census boundaries were used to map the tabular data, and turbines assigned the value of the region. In addition, political data was filtered to the year of the planning application to determine the political balance at the time of planning.
+\item
+  \textbf{Raster}: The raster value at the site location was extracted.
+\end{itemize}
+
+In comparison to previous research \citep{VanRensburg20}, no transformations were made to the standardise the dataset. Transformation provides no direct benefit to the model other than to allow a direct comparison to be made between the influence of parameters. In addition, transformed model parameters create additional complications in the generalising of model results as the model layers must be transformed to the adjusted layers \citep[p.123]{Harrell2001}.
+
+\hypertarget{statistical-modelling}{%
+\subsection{Statistical modelling}\label{statistical-modelling}}
+
+A multiple logistic regression analysis was conducted to model the factors associated with a positive planning outcome of wind turbine applications using the predictor variables listed in Table \ref{tab:SummaryTable}. This model extends the approaches developed within previous studies \citep{Toke2005, VanRensburg20, Roddis2018}. A hierarchical approach was applied to the model whereby parameters are added to the model sequentially based on the presumed importance of parameters. These were selected as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Aspatial site attributes}: variables including \emph{Number of Turbines} and \emph{Installed Capacity}.
+\item
+  \textbf{Economic considerations}: parameters which influence the cost effectiveness of the site, including \emph{Wind Speed} and \emph{Proximity to the National Grid}.
+\item
+  \textbf{Temporal}: the year in which the planning application was made to account for potential policy changes.
+\item
+  \textbf{Proximity to features}: proximity to geographic features, Landscape and Nature Designations
+\item
+  \textbf{Social attributes}: Demographic attributes for the area of the wind energy project
+\item
+  \textbf{Political attributes}: the political composition of the local authority at the time of the planning application.
+\item
+  \textbf{Spatial proximity to other turbines}: the proximity to the nearest wind energy project.
+\end{enumerate}
+
+For each additional set of parameters added to the model, diagnostic checks were made to ensure that the assumptions of logistic regression were maintained. Each parameter was checked for linearity of the logit for independent variables, absence of multicollinearity and independence of variables \citep{Harrell2001}. Any parameters which violated these conditions were removed from the model. The overall fit of the model was assessed using Pearson chi-squared, Psuedo R\textsuperscript{2} values and the residual deviance. Internal validation was used to assess the predictive accuracy of the model, with a random sample of 5\% fold size randomly selected and iterated 200 times. Once all parameters had been included within the model, a parsimonious model was produced to remove non-influential parameters, with the Akaike Information Criterion (AIC) used to determine the best fitting model. The full statistical analysis is provided as an additional appendix.
+
+Regional differences in parameter effects between England, Scotland and Wales were hypothesised due to differing population densities (England: 413/km\textsuperscript{2}, Wales: 149/km\textsuperscript{2}, Scotland: 68/km\textsuperscript{2}) \citep{ONS2013} as well as differing institutional support, with Scotland in particular placing a greater emphasis on the development of onshore wind \citep{DECC2018}. Where significant variation is expected within subgroups, split data models are recommended, whereby the dataset is segmented into groups based on model variables, and regression models are fitted to each subgroup \citep{Stoltzfus2011}. Whilst these differences can be explored using a dummy variable, such an approach only captures the level effect and not the slope effect, and therefore only allows for limited variability between the subgroups. The work reported here therefore created separate logistic regression models for each country (England, Scotland, Wales). The parameters used to construct these models used two approaches. Firstly, the parameters from the parsimonious model were used across all three models (``\emph{Global Parameter}''). Secondly, the parameters were independently iterated within each of the three group models to identify the best-fitting set for each country (``\emph{Optimised Parameters}'').
+
+\hypertarget{generalisation}{%
+\subsection{Generalisation}\label{generalisation}}
+
+A model which can predict site suitability for existing sites does not contribute to the assessment of future sites. Thus, in order to generalise the model results to all areas of Great Britain and therefore allow the model-based assessment of potential suitability, a spatial regression model was produced to generalise the results to all areas. This used the three-country parsimonious regression models to predict sites nationally at a 500m grid resolution. This model contained 13 variables, two of which were non-spatial parameters: 1) \emph{Turbine Capacity} and 2) \emph{Year}. To include these within the prediction, fixed values were assumed, and predictions made for the year 2017 with a turbine size of 2MW (the average model size for the given year \citep{DECC2018}).
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+The overall results for each stage of the hierarchical model are presented in Table \ref{tab:LogisticModelComparison}. It can be seen that there is a improvement of the Nagelkirke R\textsuperscript{2} values across the results from 0.014 (Model 1) to 0.206 (Model 7), and similarly the predictive accuracy of the model improves as more parameters are included. The final model (Model 7) reports a Hosmer-Lemeshow p-value of 0.032, which validates the null hypothesis for this model.
+
+\begin{table}[!h]
+
+\caption{\label{tab:LogisticModelComparison}A summary of the hierarchical logistic regression models}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{llllllll}
+\toprule
+  & Model 1 & Model 2 & Model 3 & Model 4 & Model 5 & Model 6 & Model 7\\
+\midrule
+Observations & 1715 & 1715 & 1715 & 1715 & 1715 & 1715 & 1715\\
+Parameters & 3 & 5 & 6 & 22 & 25 & 28 & 31\\
+Deviance & 2351 & 2346 & 2248 & 2164 & 2131 & 2127 & 2082\\
+R.n & 0.014 & 0.018 & 0.091 & 0.151 & 0.173 & 0.176 & 0.206\\
+Chi Square & 19 & 24 & 121 & 205 & 238 & 242 & 287\\
+Degrees of Freedom & 2 & 4 & 5 & 21 & 24 & 27 & 30\\
+p & 9e-05 & 1e-04 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+Residual Deviance & 1712 & 1710 & 1709 & 1693 & 1690 & 1687 & 1684\\
+AIC & 2357 & 2356 & 2260 & 2208 & 2181 & 2183 & 2144\\
+Accuracy & 52.7\% & 53.5\% & 61.7\% & 64.3\% & 64.2\% & 64.5\% & 65.3\%\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Table \ref{tab:LogisticResults} provides the results from the final hierarchical regression model (Model 7). Statistically significant positive trends (e.g.~increase in the parameter increases success rates) were observed for 1) \emph{Turbine Capacity}; 2) \emph{Distance to Urban Regions}; 3) \emph{Distance to Areas of Outstanding Natural Beauty (AONB)} 4) \emph{Distance to National Parks} and 5) \emph{Distance to Nearest Turbine (Rejected)}. Negative associations were found for 1) \emph{Year}; 2) \emph{Distance to Ramsar sites}; 3) \emph{Distance to Natura 2000 sites}; 4) \emph{Qualifications L4 (University degree or above)}; 5) \emph{Mean Age} and 6) \emph{Nearest Turbine (Operational)}.
+
+The total number of parameters retained in the parsimonious model was reduced from 30 to 15. This resulted in a marginal penalty in performance of the model, with the R\textsuperscript{2} values reducing from 0.2 to 0.193. The odds ratios (OR) for these remaining parameters are shown for each parameter in Figure \ref{fig:oddsPars}, whereby an OR equal to 1 means the parameter does not affect odds of the planning outcome, OR greater than 1 indicates the parameters positively influence planning acceptance, OR less than 1 represents a negative parameter influence.
+
+\begin{table}[!h]
+
+\caption{\label{tab:LogisticResults}Odds Table for Logistic Regression Parameters}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lrrrrlrrr}
+\toprule
+Variable & Estimate & Std. Error & z value & Pr & Sig. & Odds Ratio & OR 
+ 2.5\% CI & OR 
+ 97.5\% CI\\
+\midrule
+Number of Turbines & 0.002 & 0.006 & 0.406 & 0.685 &  & 1.002 & 0.991 & 1.014\\
+Turbine Capacity MW & 0.371 & 0.068 & 5.496 & 0.000 & *** & 1.450 & 1.271 & 1.657\\
+Wind Speed & -0.091 & 0.063 & -1.448 & 0.148 &  & 0.913 & 0.807 & 1.033\\
+Distance to HV Powerlines & 0.002 & 0.009 & 0.244 & 0.807 &  & 1.002 & 0.985 & 1.021\\
+Year & -0.119 & 0.014 & -8.517 & 0.000 & *** & 0.888 & 0.863 & 0.912\\
+Distance to Airports & 0.008 & 0.004 & 2.067 & 0.039 & * & 1.008 & 1.000 & 1.015\\
+Distance to A Roads & 0.003 & 0.013 & 0.247 & 0.805 &  & 1.003 & 0.979 & 1.028\\
+Distance to B Roads & -0.033 & 0.019 & -1.717 & 0.086 & . & 0.968 & 0.932 & 1.005\\
+Distance to Minor Roads & 0.050 & 0.071 & 0.702 & 0.482 &  & 1.051 & 0.915 & 1.207\\
+Distance to Motorways & 0.000 & 0.007 & 0.014 & 0.989 &  & 1.000 & 0.987 & 1.014\\
+Distance to Railways & 0.013 & 0.009 & 1.431 & 0.152 &  & 1.013 & 0.995 & 1.031\\
+Distance to  Urban Region & 0.169 & 0.065 & 2.585 & 0.010 & ** & 1.184 & 1.042 & 1.347\\
+Distance to AONB & 0.017 & 0.006 & 2.807 & 0.005 & ** & 1.017 & 1.005 & 1.029\\
+Distance to National Park & 0.030 & 0.007 & 4.506 & 0.000 & *** & 1.030 & 1.017 & 1.044\\
+Distance to Heritage Coast & -0.010 & 0.009 & -1.183 & 0.237 &  & 0.990 & 0.973 & 1.007\\
+Distance to NNR & -0.004 & 0.007 & -0.564 & 0.573 &  & 0.996 & 0.982 & 1.010\\
+Distance to Ramsar & 0.014 & 0.007 & 2.146 & 0.032 & * & 1.015 & 1.001 & 1.028\\
+Distance to SACS & 0.004 & 0.010 & 0.438 & 0.661 &  & 1.004 & 0.985 & 1.023\\
+Distance to Natura 2000 & -0.019 & 0.008 & -2.306 & 0.021 & * & 0.981 & 0.965 & 0.997\\
+Distance to SSSI & 0.040 & 0.025 & 1.601 & 0.109 &  & 1.041 & 0.991 & 1.094\\
+Distance to Military Sites & 0.001 & 0.008 & 0.084 & 0.933 &  & 1.001 & 0.985 & 1.016\\
+Qualifications, L4 & -0.032 & 0.007 & -4.596 & 0.000 & *** & 0.968 & 0.955 & 0.981\\
+Mean Age & -0.041 & 0.017 & -2.367 & 0.018 & * & 0.960 & 0.928 & 0.993\\
+Home Ownership & 0.000 & 0.000 & 0.542 & 0.588 &  & 1.000 & 0.999 & 1.001\\
+Political, Conservative Share & -0.001 & 0.003 & -0.305 & 0.760 &  & 0.999 & 0.992 & 1.006\\
+Political, Labour Share & 0.005 & 0.004 & 1.279 & 0.201 &  & 1.005 & 0.997 & 1.013\\
+Political, Liberal Democrat & 0.003 & 0.005 & 0.694 & 0.488 &  & 1.003 & 0.994 & 1.013\\
+Nearest Turbine (Operational) & -0.017 & 0.004 & -4.238 & 0.000 & *** & 0.983 & 0.975 & 0.991\\
+Nearest Turbine (Rejected) & 0.021 & 0.003 & 6.339 & 0.000 & *** & 1.021 & 1.015 & 1.028\\
+Distance to  Large Urban Areas & -0.004 & 0.013 & -0.316 & 0.752 &  & 0.996 & 0.971 & 1.022\\
+\bottomrule
+\multicolumn{9}{l}{\textit{Signif. codes: } 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1}\\
+\end{tabular}}
+\end{table}
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/figure7} 
+
+}
+
+\caption{Odds Plot for Parsimonious Logistic Regression Model}\label{fig:oddsPars}
+\end{figure}
+
+The results of the nationally-segmented models are summarised in Table \ref{tab:kableNestedModelResults}, comparing the \emph{Global Parameters} against \emph{Optimised Parameters}. There has been a general increase in the fit of the models represented by the Nagelkirke R\textsuperscript{2} values. The difference between Odds Ratios between each model is further highlighted in Table \ref{tab:segmented} for the Global Parameters.
+
+\begin{table}[!h]
+
+\caption{\label{tab:kableNestedModelResults}Comparison of subset Logistic Regression Models based on the global parameters list}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{llllllll}
+\toprule
+\multicolumn{2}{c}{ } & \multicolumn{3}{c}{Global Parameter} & \multicolumn{3}{c}{Optimised Parameters} \\
+\cmidrule(l{2pt}r{2pt}){3-5} \cmidrule(l{2pt}r{2pt}){6-8}
+  & Global & England & Scotland & Wales & England & Scotland & Wales\\
+\midrule
+Observations & 1715 & 772 & 787 & 156 & 772 & 787 & 156\\
+Parameters & 16 & 16 & 16 & 16 & 10 & 13 & 9\\
+Deviance & 2094 & 927 & 940 & 176 & 932 & 943 & 180\\
+R.n & 0.198 & 0.209 & 0.232 & 0.302 & 0.202 & 0.228 & 0.275\\
+Chi Square & 275 & 131 & 150 & 40 & 126 & 148 & 36\\
+Degrees of Freedom & 15 & 15 & 15 & 15 & 9 & 12 & 8\\
+p & 0.000 & 0.000 & 0.000 & 0.00045 & 0.000 & 0.000 & 2e-05\\
+Residual Deviance & 1699 & 756 & 771 & 140 & 762 & 774 & 147\\
+Accuracy & 66.6\% & 66.3\% & 67.4\% & 60.3\% & 67.5\% & 67.2\% & 63.6\%\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+
+\caption{\label{tab:segmented}Odds Ratios and significance for segmented regression models}
+\centering
+\begin{tabular}{lrlrlrl}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{England} & \multicolumn{2}{c}{Scotland} & \multicolumn{2}{c}{Wales} \\
+\cmidrule(l{2pt}r{2pt}){2-3} \cmidrule(l{2pt}r{2pt}){4-5} \cmidrule(l{2pt}r{2pt}){6-7}
+Variable & OR &  & OR &  & OR & \\
+\midrule
+Turbine Capacity MW & 1.428 & *** & 1.562 & *** & 1.654 & *\\
+Year & 0.882 & *** & 0.859 & *** & 0.919 & *\\
+Distance to B Roads & 0.962 &  & 0.961 & . & 0.933 & \\
+Distance to Railways & 0.987 &  & 1.027 & ** & 1.001 & \\
+Distance to  Urban Region & 1.181 &  & 1.240 & *** & 1.158 & \\
+Distance to AONB & 1.009 &  & 1.029 & ** & 1.083 & **\\
+Distance to National Park & 1.032 & *** & 1.036 & ** & 1.073 & **\\
+Distance to Ramsar & 1.012 &  & 1.030 & *** & 0.948 & \\
+Distance to Natura 2000 & 0.986 &  & 0.970 & * & 0.916 & **\\
+Distance to SSSI & 1.016 &  & 1.020 &  & 1.840 & ***\\
+Qualifications, L4 & 0.969 & *** & 0.964 & ** & 0.984 & \\
+Mean Age & 0.978 &  & 0.969 &  & 0.836 & .\\
+Political, Labour Share & 1.005 &  & 0.996 &  & 1.014 & \\
+Nearest Turbine (Operational) & 0.979 & *** & 0.987 & * & 0.991 & \\
+Nearest Turbine (Rejected) & 1.024 & *** & 1.019 & *** & 1.012 & \\
+\bottomrule
+\multicolumn{7}{l}{\textit{Signif. codes:} 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1}\\
+\end{tabular}
+\end{table}
+
+Finally, the results of the statistical generalisation are presented in Figure \ref{fig:predictionRaster}, with sites being scored (0-100\%) based on the predicted chance of project proposal. The average acceptance value of the model is 21.9\%. Only 1.80\% of sites were predicted to have a greater than 50\% chance of success, and 10.9\% of sites were predicted to have an acceptance rate of less than 10\%.
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=1\linewidth]{figures/figure8} 
+
+}
+
+\caption{The generalised statistical model and predicted site acceptance for England, Scotland and Wales}\label{fig:predictionRaster}
+\end{figure}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+\hypertarget{significant-parameters}{%
+\subsection{Significant parameters}\label{significant-parameters}}
+
+For project characteristics, the size of the turbine capacity is a significant parameter, with larger turbines increasing the chance of acceptance (note that this refers to the size of each individual turbine, not the overall capacity of the project). This at first appears counter intuitive, as it may be expected that smaller turbines cause a lower visual impact and are therefore less opposed. However, there are two options which are considered. Firstly, this result may suggest that the developers of larger turbines are more likely to appeal the decisions made against their projects, as rejection of such projects would result in a large loss of potential revenue. Secondly, there is evidence of correlation between turbine size and project (r = 0.35), and that larger turbines are more likely to be in projects of over 50MW which were previously influenced under the nationally significant infrastructure, with such planning decisions potentially being more favourable for projects as they reduce the local influence on projects. However, it should be noted that this variable has a small standard deviation (sd = 1.0) compared to other variables included within this model, and therefore the non-standardised odds ratio inflates the perceived influence of this variable.
+
+The distance to urban areas was indicated to be statistically significant, with sites further away from urban areas appearing more socially acceptable, although there is considerable uncertainty as indicated by the confidence interval. This supports the use of this ``classic'' parameter within existing geospatial models. There are a number of potential causes for this: firstly, it could indicate that high wind speed sites suitable for development tend to be naturally less populated (i.e.~hilly, isolated regions). Additionally, it may reflect a so-called ``Not in My Back Yard'' (NIMBY) view from the vocal local population, with projects in closer proximity to urban areas being more likely to be rejected. This has been a relatively contentious subject within literature, with a range of studies supporting \citep{Haggett2006, Jones2010} and rejecting \citep{VanRensburg20, Devine-Wright2005a, Populus2005} the NIMBY argument. However this study provides quantitative evidence to suggest that sites closer to urban areas have a lower chance of acceptance.
+
+For landscape and environmental designations, distance to National Parks, Ramsar and AONB were indicated as significant parameters, again with sites being further away being suggested as more acceptable, although these parameters have marginal impacts. This potentially reflects the negative visual impacts which are often cited as a major impact of wind energy developments \citep{Langer2016, Jones2010}. However, it should be noted that these influences have a relatively low impact, despite literature indicating that landscape designations would play a more important role \citep{Langer2016}.
+
+The level of qualifications, and the mean age of the local population have been retained as significant parameters for demographic variables. Thus, the higher the proportion of people with higher qualifications and the higher the local mean age, the less likely projects are to be approved. This novel result suggests that regions of higher education may be more effective in organising campaign groups against such projects and supports the hypothesis developed by Van der Horst and Toke \citep{VanderHorst2010} that developers are likely to avoid more privileged areas. Conversely, there are no statistically significant effects for share of local councillors by political party, which suggests that individual political beliefs do not influence the planning outcome of wind energy projects.
+
+The analysis suggests that proximity to existing wind energy developments may influence the likelihood of projects receiving planning. The nearest operational wind energy project was indicated as having a statistically significant effect, indicating that projects further away from an existing project are less likely to be accepted. In addition, the nearest rejected project is suggested to be have a positive effect, inferring that the further the site is from a previously rejected project, the higher the chance of acceptance. This ``proximity hypothesis'' has been a contentious subject challenged within literature \citep{Meyerhoff2010, Ladenburg2008, Eltham2008} and this study provides quantitative evidence to challenge this previous research.
+
+There are notable parameters which are frequently used in GIS modelling, but do not prove influential, including wind speed and the proximity to airports. This may reflect that these parameters represent technical challenges which can be investigated in the early stages of project development, and therefore any sites that are not suitable will not progress to seek planning permission.
+
+It is interesting to note that despite including similar methodology as the study by Roddis et al.~\citeyearpar{Roddis2018}, there was limited overlap with the parameters used, with only 11 of the 30 parameters used in this study being shared between the two studies. Of these parameters, supporting relationships were found between three of these variables 1) \emph{Distance to National Parks} 2) \emph{Turbine Capacity} and 3) \emph{Year of planning application}. However, as the statistical model is not provided with the paper, it is not possible to further assess the difference in greater detail, although there appear to be opportunities to integrate the two methodologies proposed.
+
+\hypertarget{model-fit}{%
+\subsection{Model fit}\label{model-fit}}
+
+The overall model fit of parameters is comparatively low based on geospatial parameters alone, with the global parsimonious model achieving a fit of 0.2. In comparison, the studies by Van Rensburg et al.~\citep{VanRensburg20} and Roddis et al \citep{Roddis2018} achieved an overall adjusted R\textsuperscript{2} value of 0.31 and 0.26 respectively. Although fewer geospatial parameters were included within these studies, they integrated greater number of institutional details and planning details, which suggests that details of the planning process are a more important indicator of site success than the spatial parameters alone.
+
+\hypertarget{national-models}{%
+\subsection{National models}\label{national-models}}
+
+The split data model developed suggests that despite hypothesised differences between the three nations, there is limited variation between the significant influential parameters. Only \emph{Wind Speed} exhibited variations in the positive and negative relationships, with the model suggesting that sites in England have a greater chance of acceptance at sites of higher windspeed whilst Wales and Scotland reporting the opposite. However, the reduced number of observations used to build each model increases the uncertainty substantially as indicated by the greater confidence intervals.
+
+\hypertarget{generalisation-1}{%
+\subsection{Generalisation}\label{generalisation-1}}
+
+The national prediction plot (Figure \ref{fig:predictionRaster}) shows the estimated probability of success of wind turbines within Great Britain. The results demonstrate that there are large regional variations within wind energy site acceptability. For example, large regions in Scotland appear suitable for development, while many other regions and especially the South of England appear ``off limits'' to development, particularly the regions along the South Coast of Great Britain.
+
+For the overall model, there is a low average predicted acceptance rate of 21.9\% which is below the rate of acceptance of wind energy in Great Britain, which was 40\% in 2017 \citep{DECC2018}. However, it would be expected that the model would return a lower average, as sites which are selected by developers will pass through several preselection criteria prior to planning permission \citep{Smith2016}. Therefore, sites which are generally opposed before planning will often be abandoned before being taken to planning permission.
+
+The analysis results suggest that there is no ``one-size-fits-all'' approach for spatial modelling, and that there are large regional variations in the development of wind energy projects beyond the availability of the resource. In comparison, the regional renewable energy studies conducted within Great Britain in 2010 broadly followed a consistent methodology to assess the resource potential, with small differences in the development rules in particular with regard to environmental and landscape designations \citep{Stoddart2012}. In recent years, government policy has shifted away from such top-down, standardised planning, and it is therefore important that geospatial modelling aims to integrate local context to more accurately capture this variation.
+
+Surprisingly, the model suggests that the South West of England has a low likelihood of acceptance, despite having high levels of wind energy within the area. Great Britain's wind energy development largely started in the region, so it had generally been considered supportive of wind energy \citep{Eltham2008}. Upon inspection, it can be noted that this low level of acceptability is caused by the large number of wind turbines and planning applications within the area, regional demographics (high mean age) and proximity to protected landscapes.
+
+Although the model makes spatial predictions for 2017, there are difficulties forecasting beyond 2015 due to the changes within the planning system explained within Section \ref{introduction}. These changes granted greater control of onshore wind energy developments to local communities, which has effectively allowed local communities to block any wind energy developments. As the methodology does not explicitly model planning constraints, it is not possible to assess this shift in potential acceptance this has caused. However, there are suggestions that the planning system may be reduce the difficulty in constructing projects, and such a model may be able to more accurately assess these changes. Therefore, the model results of this work can provide a clear starting point for assessment of onshore UK wind if and when local constraints are revised.
+
+\hypertarget{conclusions-and-policy-recommendations}{%
+\section{Conclusions and policy recommendations}\label{conclusions-and-policy-recommendations}}
+
+This paper has investigated the influence of geospatial, environmental, demographic and political attributes on the probability of wind farm planning approval in Great Britain between 1990 and 2015. The study findings reveal that local demographic parameters are associated with the planning outcomes of projects, and that many of the geospatial parameters typically integrated into wind turbine models appear insignificant in determining site approval.
+
+The results raise concerns of the value of existing geospatial modelling in assessing suitable locations for wind energy sites. These findings provide evidence to support existing literature that such geospatial tools in themselves are of limited applicability \citep{Toke2005, Malczewski2004}, and supports the conclusion that greater emphasis needs to be given to the non-physical elements of a project, such as local population attributes and potential community engagement with the scheme from an early stage \citep{Toke2008, Wolsink2000, Warren2010, Roddis2018}. Other countries, most notably Germany, place a much greater importance on ownership structures of projects suggesting that locally owned projects may also be a much more important factor than the geospatial parameters surrounding a site \citep{Warren2010}. These findings therefore suggest that if a wind power developer can address the oppositions from local residency, geospatial conditions will have less influence to social acceptance.
+
+Although the models have a relatively low overall fit, they are consistent with previous research \citep{Roddis2018, VanRensburg20}, and there is value in the generalisation of statistical model and resulting map of onshore wind energy site suitability (Figure \ref{fig:predictionRaster}). With the estimated cost of planning applications for commercial scale projects exceeding £50,000 \citep{RF2016}, even marginal improvements in the site selection process using these results could offer substantial cost and risk reduction. This therefore allows a developer to filter out areas which have positive geo-spatial conditions but more challenging social acceptance conditions. This is the impact the study aims to bring to the sector.
+
+The findings from this model can help inform regional level energy strategy by providing Local Authorities with the tools to understand where and why developers may target turbine sites and the relative importance of local physical, environmental and social attributes. Since the modelling approach is repeatable it would also be possible to repeat the model with additional locally relevant attributes and/or renewed local demographic attributes to take account of local social change. The results may also bring to the fore the possibility of an unintended focusing of development on relatively disadvantaged areas through developer targeting and/or local political decision-making processes.
+
+The model raises important system implications within the UK's electricity network. While there are specific regions which appear more accepting of onshore wind, it may not be ideal for wind turbine developments to be concentrated within these small areas. Such concentration of wind development into small areas can result in grid constraints and require additional capacity installed \citep{alexander2014energy} For example, Dumfries and Galloway already suffers from major curtailment issues due to lack of available grid capacity but is marked in places as a likely site \citep{DECC2016}. In addition, focussing renewable energy resources into smaller regions can reduce the security of supply of resources, as there is less geographically dispersed variation in the resource \citep{ENGELAND2017600}. The results of this analysis therefore require further detailed mapping for it to be used as a decision-making tool.
+
+The generalised model results highlight that there is large regional variation within the site acceptability of onshore wind within Great Britain. Regions of Scotland, England and Wales are suggested to be more accepting of onshore wind projects, while there are large regions of low acceptance notably the south-coast of England. Existing geospatial modelling should integrate local understanding if they are to provide realistic estimates of wind turbine sites, a finding which supports existing literature \citep{Langer2016, Roddis2018}, as ``\emph{traditional}'' GIS which focusses on technical parameters may not capture the variation of sites between regions.
+
+As shown within the literature, studies have been conducted internationally and have often reported conflicting issues surrounding the social acceptance of projects \citep{Scherhaufer2017, Warren2010}. As such, the results of this study may therefore be specific to Great Britain. It is recommended that international comparison is conducted using similar methods to provide further insight into this potential national variation.
+
+Great Britain provides an interesting international example in renewable energy development, as energy policy has shifted towards a more hostile stance against onshore wind energy since 2015. In particular, the approval of planning has been granted to local communities, and it appears that certain demographics are less accepting of onshore wind in Great Britain. However, there are indications that legislation may be altered to make wind turbine developments permitted in areas which are generally supportive \emph{(Clean Growth Strategy/Outcomes of Bonn COP23, HC596/597)}. The generalised map (Figure \ref{fig:predictionRaster}) highlights that from a planning approval rate, there are regions in the England and Wales which still appear accepting of wind. As existing policy has effectively stalled onshore wind within the country with the unintentional consequence to completely block development, the results suggest that there would be opportunities for future growth in onshore wind energy development in Great Britain.
+
+\hypertarget{acknowledgments}{%
+\subsection*{Acknowledgments}\label{acknowledgments}}
+\addcontentsline{toc}{subsection}{Acknowledgments}
+
+This work is part of the activities of the Energy and Climate Change Division and the Sustainable Energy Research Group at the University of Southampton \url{www.energy.soton.ac.uk}. It is also supported by ESPRC under grant EP/J017698/1, Transforming the Engineering of Cities to Deliver Societal and Planetary Wellbeing and the Faculty of Engineering and Environment at the University of Southampton.
+
+\hypertarget{reproducibility-statement}{%
+\subsection*{Reproducibility Statement}\label{reproducibility-statement}}
+\addcontentsline{toc}{subsection}{Reproducibility Statement}
+
+The data and supporting analysis are made available as supplementary data for this. The analysis and report was written using the R programming language and R Markdown \citep{R-rmarkdown}, with the full statistical analysis and turbine dataset provided with the supporting files to allow for the results of a the analysis to be reproduced.
+
+\newpage
+
+\begin{landscape}\begin{table}[t]
+
+\caption{\label{tab:unnamed-chunk-3}Summary of data sources used within model}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{rlllllll}
+\toprule
+ID & Category & Variable & Source & Data Type & Variable Value & Value Type & Unit\\
+\midrule
+1 & Turbine & Wind Turbine Planning Data & REPD (DECC, 2016) & Tabular & Planning Outcome & Categorical & Accept/Reject\\
+2 &  & Turbine Capacity &  & Tabular & Megawatts/turbine & Continuous & MW\\
+3 &  & Number of Turbines &  & Tabular &  & Continuous & \\
+4 &  & Year &  & Tabular &  & Discrete & \\
+5 &  & Country &  & Tabular &  & Categorical & \\
+6 & Resource & Wind Speed & NOABL (DTI, 2001) & Raster & Annualised Wind Speed & Continuous & m/s\\
+7 & Features & Airports & OpenGeo & Points & Distance to Feature & Continuous & km\\
+8 &  & Roads\textsuperscript{a} & OS Strategi (Ordnance Survey, 2016) & Lines & Distance to Feature & Continuous & km\\
+9 &  & Railways &  & Lines & Distance to Feature & Continuous & km\\
+10 &  & Urban Areas &  & Polygons & Distance to Feature & Continuous & km\\
+11 &  & HV Powerlines\textsuperscript{b} & OSM & Lines & Distance to Feature & Continuous & km\\
+12 &  & Military Sites & OSM & Points, Polygons & Distance to Feature & Continuous & km\\
+13 & Landscape & Areas of Outstanding Natural Beauty & National Heritage & Polygons & Distance to Feature & Continuous & km\\
+14 &  & National Parks &  & Polygons & Distance to Feature & Continuous & km\\
+15 &  & Heritage Coast &  & Polygons & Distance to Feature & Continuous & km\\
+16 & Nature & Special Protection Areas &  & Polygons & Distance to Feature & Continuous & km\\
+17 &  & National Nature Reserve &  & Polygons & Distance to Feature & Continuous & km\\
+18 &  & Sites of Special Scientific Interest &  & Polygons & Distance to Feature & Continuous & km\\
+19 &  & Special Areas of Conservation &  & Polygons & Distance to Feature & Continuous & km\\
+20 & Geographic & Elevation & EU DEM & Raster & Height above sea level & Integer & m\\
+21 &  & Slope & Derived from 18 & Raster & Gradient & Continuous & \%\\
+22 & Census & Level of Qualification\textsuperscript{c} & ONS & Tabular & Higher than L4 & Continuous & \%\\
+23 &  & Age &  & Tabular & Mean & Continuous & Years\\
+24 &  & Social Grade\textsuperscript{d} &  & Tabular & Social Grade AB & Continuous & \%\\
+25 &  & Tenure &  & Tabular & Home Ownership & Continuous & \%\\
+26 & Political & Conservatives & Populus & Tabular & Percentage of Council & Continuous & \%\\
+27 &  & Labour &  & Tabular & Percentage of Council & Continuous & \%\\
+28 &  & Liberal Democrat &  & Tabular & Percentage of Council & Continuous & \%\\
+29 & Proximity & Nearest Turbine (Operational) & Calculated & Points & Distance to Turbine & Continuous & km\\
+30 &  & Nearest Turbine (Rejected) & Calculated & Points & Distance to Turbine & Continuous & km\\
+\bottomrule
+\multicolumn{8}{l}{\textsuperscript{a} Roads are broken into four main categories: Motorways, A Roads, B Roads and Minor Roads}\\
+\multicolumn{8}{l}{\textsuperscript{b} High Voltage network from 132 kV to 400 kV}\\
+\multicolumn{8}{l}{\textsuperscript{c} L4 represents degree level or above}\\
+\multicolumn{8}{l}{\textsuperscript{d} AB represents Higher and intermediate managerial, administrative, professional occupation}\\
+\end{tabular}}
+\end{table}
+\end{landscape}
+
+\bibliography{bibliography.bib}
+
+
+\end{document}

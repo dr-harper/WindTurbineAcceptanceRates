@@ -1,12 +1,12 @@
 ID,Category,Variable,Source,Data Type,Variable Value,Value Type,Unit
-1,Turbine,Wind Turbine Planning Data,REPD,Tabular,Planning Outcome,Categorical,Accept/Reject
+1,Turbine,Wind Turbine Planning Data,"REPD (DECC, 2016)",Tabular,Planning Outcome,Categorical,Accept/Reject
 2,,Turbine Capacity,,Tabular,Megawatts/turbine,Continuous,MW
 3,,Number of Turbines,,Tabular,,Continuous,
 4,,Year,,Tabular,,Discrete,
 5,,Country,,Tabular,,Categorical,
-6,Resource,Wind Speed,NOABL,Raster,Annualised Wind Speed,Continuous,m/s
+6,Resource,Wind Speed,"NOABL (DTI, 2001)",Raster,Annualised Wind Speed,Continuous,m/s
 7,Features,Airports,OpenGeo,Points,Distance to Feature,Continuous,km
-8,,Roads\textsuperscript{a},OS Strategi,Lines,Distance to Feature,Continuous,km
+8,,Roads\textsuperscript{a},"OS Strategi (Ordnance Survey, 2016)",Lines,Distance to Feature,Continuous,km
 9,,Railways,,Lines,Distance to Feature,Continuous,km
 10,,Urban Areas,,Polygons,Distance to Feature,Continuous,km
 11,,HV Powerlines\textsuperscript{b},OSM,Lines,Distance to Feature,Continuous,km

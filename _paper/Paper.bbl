@@ -1,0 +1,679 @@
+\begin{thebibliography}{86}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Alexander et~al.(2014)Alexander, James, and
+  Richardson]{alexander2014energy}
+Marcus~Joseph Alexander, Patrick James, and Neil Richardson.
+\newblock Energy storage against interconnection as a balancing mechanism for a
+  100\% renewable uk electricity grid.
+\newblock \emph{IET Renewable Power Generation}, 9\penalty0 (2):\penalty0
+  131--141, 2014.
+
+\bibitem[Allaire et~al.(2018)Allaire, Xie, McPherson, Luraschi, Ushey, Atkins,
+  Wickham, Cheng, and Chang]{R-rmarkdown}
+JJ~Allaire, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron
+  Atkins, Hadley Wickham, Joe Cheng, and Winston Chang.
+\newblock \emph{rmarkdown: Dynamic Documents for R}, 2018.
+\newblock URL \url{https://CRAN.R-project.org/package=rmarkdown}.
+\newblock R package version 1.10.
+
+\bibitem[Atici et~al.(2015)Atici, Simsek, Ulucan, and Tosun]{Atici2015}
+Kazim~Baris Atici, Ahmet~Bahadir Simsek, Aydin Ulucan, and Mustafa~Umur Tosun.
+\newblock {A GIS-based Multiple Criteria Decision Analysis approach for wind
+  power plant site selection}.
+\newblock \emph{Utilities Policy}, 37:\penalty0 86--96, 2015.
+\newblock ISSN 09571787.
+\newblock \doi{10.1016/j.jup.2015.06.001}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.jup.2015.06.001}.
+
+\bibitem[Aydin et~al.(2010)Aydin, Kentel, and Duzgun]{Aydin2010}
+Nazli~Yonca Aydin, Elcin Kentel, and Sebnem Duzgun.
+\newblock {GIS-based environmental assessment of wind energy systems for
+  spatial planning: A case study from Western Turkey}.
+\newblock \emph{Renewable and Sustainable Energy Reviews}, 14\penalty0
+  (1):\penalty0 364--373, 2010.
+\newblock ISSN 13640321.
+\newblock \doi{10.1016/j.rser.2009.07.023}.
+
+\bibitem[Baban and Parry(2001)]{Baban2001}
+Serwan M~J Baban and Tim Parry.
+\newblock {Developing and applying a GIS-assisted approach to locating wind
+  farms in the UK}.
+\newblock \emph{Renewable Energy}, 24\penalty0 (1):\penalty0 59--71, 2001.
+\newblock ISSN 09601481.
+\newblock \doi{10.1016/S0960-1481(00)00169-5}.
+
+\bibitem[Baseer et~al.(2017)Baseer, Rehman, Meyer, and Alam]{Baseer2017}
+M.a. Baseer, S.~Rehman, J.P. Meyer, and Md.~M. Alam.
+\newblock {GIS-based site suitability analysis for wind farm development in
+  Saudi Arabia}.
+\newblock \emph{Energy}, 2017.
+\newblock ISSN 03605442.
+\newblock \doi{10.1016/j.energy.2017.10.016}.
+\newblock URL
+  \url{http://linkinghub.elsevier.com/retrieve/pii/S0360544217316857}.
+
+\bibitem[Bright et~al.(2006)Bright, Langston, Bullman, Evans, Gardner,
+  Pearce-Higgins, and Wilson]{Bright2006}
+J~a Bright, R~H~W Langston, R~Bullman, R~J Evans, S~Gardner, J~Pearce-Higgins,
+  and E~Wilson.
+\newblock {Bird sensitivity map to provide locational guidance for onshore wind
+  farms in Scotland}.
+\newblock 20\penalty0 (20):\penalty0 i--ii, 1--136, 2006.
+\newblock URL \url{<Go to ISI>://ZOOREC:ZOOR14403015814}.
+
+\bibitem[Brody et~al.(2002)Brody, Vorhees, Melly, Swedis, Drivas, and
+  Rudel]{Brody2002}
+Julia~Green Brody, Donna~J. Vorhees, Steven~J. Melly, Susan~R Swedis, Peter
+  Drivas, and Ruthann~A. Rudel.
+\newblock Using gis and historical records to reconstruct residential exposure
+  to large-scale pesticide application.
+\newblock \emph{Journal of Exposure Analysis and Environmental Epidemiology},
+  12:\penalty0 64--80, 2002.
+
+\bibitem[Cirucci(2014)]{Cirucci2014}
+John Cirucci.
+\newblock {Retrospective GIS-Based Multi-Criteria Decision Analysis}.
+\newblock \penalty0 (December), 2014.
+
+\bibitem[Cirucci et~al.(2015)Cirucci, Miller, and Blanford]{Cirucci2015}
+John~F Cirucci, Douglas~A Miller, and Justine~I Blanford.
+\newblock {Retrospective GIS-Based Multi-Criteria Decision Analysis: A Case
+  Study of California Waste Transfer Station Siting Decisions}.
+\newblock \emph{Proceedings of the International Symposium on Sustainable
+  Systems and Technologies}, 3, 2015.
+\newblock \doi{10.6084/m9.figshare.1512514}.
+
+\bibitem[Cowell and Devine-Wright(2018)]{Cowell2018}
+Richard Cowell and Patrick Devine-Wright.
+\newblock {A ‘delivery-democracy dilemma'? Mapping and explaining policy
+  change for public engagement with energy infrastructure}.
+\newblock \emph{Journal of Environmental Policy and Planning}, 0\penalty0
+  (0):\penalty0 1--19, 2018.
+\newblock ISSN 15227200.
+\newblock \doi{10.1080/1523908X.2018.1443005}.
+\newblock URL \url{https://doi.org/10.1080/1523908X.2018.1443005}.
+
+\bibitem[DECC(2016)]{DECC2016}
+DECC.
+\newblock {Renewable electricity in Scotland, Wales , Northern Ireland and the
+  regions of England in 2016}.
+\newblock \emph{Energy Trends}, 2016.
+
+\bibitem[DECC(2018)]{DECC2018}
+DECC.
+\newblock {Renewable Energy Planning Database}, 2018.
+\newblock URL
+  \url{https://www.gov.uk/government/collections/renewable-energy-planning-data}.
+
+\bibitem[{Department for Business Energy {\&} Industrial
+  Strategy}(2018)]{DBIES2018}
+{Department for Business Energy {\&} Industrial Strategy}.
+\newblock {Energy and Climate Change Public Attitudes Tracker}.
+\newblock \penalty0 (April), 2018.
+
+\bibitem[{Department for Business Energy \& Industry}(2016)]{DBIES2016}
+{Department for Business Energy \& Industry}.
+\newblock {Electricity Generation Costs}.
+\newblock Technical report, 2016.
+
+\bibitem[Devine-Wright(2005{\natexlab{a}})]{Devine-Wright2005}
+Patrick Devine-Wright.
+\newblock {Local aspects of UK renewable energy development: exploring public
+  beliefs and policy implications}.
+\newblock \emph{Local Environment}, 10\penalty0 (1):\penalty0 57--69,
+  2005{\natexlab{a}}.
+\newblock ISSN 1354-9839.
+\newblock \doi{10.1080/1354983042000309315}.
+
+\bibitem[Devine-Wright(2005{\natexlab{b}})]{Devine-Wright2005a}
+Patrick Devine-Wright.
+\newblock {Beyond NIMBYism: Towards an integrated framework for understanding
+  public perceptions of wind energy}.
+\newblock \emph{Wind Energy}, 8\penalty0 (2):\penalty0 125--139,
+  2005{\natexlab{b}}.
+\newblock ISSN 10954244.
+\newblock \doi{10.1002/we.124}.
+
+\bibitem[Devine-Wright(2007)]{Devine-Wright2007}
+Patrick Devine-Wright.
+\newblock {Reconsidering public attitudes and public acceptance of renewable
+  energy technologies : a critical review}.
+\newblock Working Paper, 2007.
+
+\bibitem[DTI(2001)]{DTI2001}
+DTI.
+\newblock {NOABL Windspeed Database}, 2001.
+\newblock URL \url{https://goo.gl/6BALyv}.
+
+\bibitem[Eltham et~al.(2008)Eltham, Harrison, and Allen]{Eltham2008}
+Douglas~C. Eltham, Gareth~P. Harrison, and Simon~J. Allen.
+\newblock {Change in public attitudes towards a Cornish wind farm: Implications
+  for planning}.
+\newblock \emph{Energy Policy}, 36\penalty0 (1):\penalty0 23--33, jan 2008.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2007.09.010}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S0301421507004090}.
+
+\bibitem[Engeland et~al.(2017)Engeland, Borga, Creutin, François, Ramos, and
+  Vidal]{ENGELAND2017600}
+Kolbjørn Engeland, Marco Borga, Jean-Dominique Creutin, Baptiste François,
+  Maria-Helena Ramos, and Jean-Philippe Vidal.
+\newblock Space-time variability of climate variables and intermittent
+  renewable electricity production – a review.
+\newblock \emph{Renewable and Sustainable Energy Reviews}, 79:\penalty0 600 --
+  617, 2017.
+\newblock ISSN 1364-0321.
+\newblock \doi{https://doi.org/10.1016/j.rser.2017.05.046}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S1364032117306822}.
+
+\bibitem[{European Commission}(2015)]{Commission2015}
+{European Commission}.
+\newblock {Digital Elevation Model over Europe (EU-DEM)}, 2015.
+\newblock URL \url{http://www.eea.europa.eu/data-and-maps/data/eu-dem}.
+
+\bibitem[{European Environment Agency}(2009)]{EuropeanEnvironmentAgency2009}
+{European Environment Agency}.
+\newblock \emph{{Europe's onshore and offshore wind energy potential}},
+  volume~6.
+\newblock 2009.
+\newblock ISBN 9789292130008.
+\newblock \doi{10.2800/11373}.
+\newblock URL \url{www.eea.europa.eu}.
+
+\bibitem[Fleming and Hoffer(1979)]{Fleming1979}
+Michael~D Fleming and Roger~M Hoffer.
+\newblock {Machine Processing of Landsat MSS Data and DMA Topographic Data for
+  Forest Cover Type Mapping}.
+\newblock \emph{LARS Technical Report 082879 Laboratory for Applications of
+  Remote Sensing, Purdue University, West Lafayette, Indiana.}, pages 377--390,
+  1979.
+
+\bibitem[Garcia-Ayllon(2013)]{Garcia-Ayllon2013}
+S.~Garcia-Ayllon.
+\newblock {Retrospective analysis of urban development in the Spanish
+  Mediterranean coast}.
+\newblock \emph{WIT Transactions on Ecology and the Environment}, 179
+  VOLUME\penalty0 (December 2013):\penalty0 291--302, 2013.
+\newblock ISSN 17433541.
+\newblock \doi{10.2495/SC130251}.
+
+\bibitem[Gass et~al.(2013)Gass, Schmidt, Strauss, and Schmid]{Gass2013}
+Viktoria Gass, Johannes Schmidt, Franziska Strauss, and Erwin Schmid.
+\newblock {Assessing the economic wind power potential in Austria}.
+\newblock \emph{Energy Policy}, 53\penalty0 (2013):\penalty0 323--330, 2013.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2012.10.079}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.enpol.2012.10.079}.
+
+\bibitem[Gigovi{\'{c}} et~al.(2017)Gigovi{\'{c}}, Pamu{\v{c}}ar,
+  Bo{\v{z}}ani{\'{c}}, and Ljubojevi{\'{c}}]{Gigovic2017}
+Ljubomir Gigovi{\'{c}}, Dragan Pamu{\v{c}}ar, Darko Bo{\v{z}}ani{\'{c}}, and
+  Srđan Ljubojevi{\'{c}}.
+\newblock {Application of the GIS-DANP-MABAC multi-criteria model for selecting
+  the location of wind farms: A case study of Vojvodina, Serbia}.
+\newblock \emph{Renewable Energy}, 103:\penalty0 501--521, 2017.
+\newblock ISSN 09601481.
+\newblock \doi{10.1016/j.renene.2016.11.057}.
+
+\bibitem[Gove et~al.(2013)Gove, Langston, McCluskie, Pullan, and
+  Scrase]{Gove2013}
+B~Gove, Rhw Langston, A~McCluskie, Jd~Pullan, and I~Scrase.
+\newblock {Wind farms and birds: an updated analysis of the effects of wind
+  farms on bird, and best practice guidance on integrated planning and impact
+  assessement}.
+\newblock Technical Report August, 2013.
+
+\bibitem[Haggett and Toke(2006)]{Haggett2006}
+Claire Haggett and David Toke.
+\newblock {Crossing the great divide-using multi-method analysis to understand
+  opposition to windfarms}.
+\newblock \emph{Public Administration}, 84\penalty0 (1):\penalty0 103--120,
+  2006.
+\newblock ISSN 00333298.
+\newblock \doi{10.1111/j.0033-3298.2006.00495.x}.
+
+\bibitem[Hansen(2005)]{Hansen2005}
+H.~S. Hansen.
+\newblock {GIS-based Multi-Criteria Analysis of Wind Farm Development}.
+\newblock \emph{Proceedings of the 10th Scandinavian Research Confrence on
+  Geographical Information Scient}, pages 75--87, 2005.
+
+\bibitem[Harper(2018)]{Harper2018}
+Michael Harper.
+\newblock \emph{{Spatial planning scale for regional renewable energy supply in
+  the UK context}}.
+\newblock PhD thesis, University of Southampton, 2018.
+
+\bibitem[Harper et~al.(2017)Harper, Anderson, James, and Bahaj]{Harper2017}
+Michael Harper, Ben Anderson, Patrick James, and A.~S. Bahaj.
+\newblock {Identifying key influences for planning acceptance of onshore wind
+  turbines}.
+\newblock In \emph{Proceedings of Ecos 2017 - the 30th International Conference
+  on Efficiency, Cost, Optimization, Simulation and Environmental Impact of
+  Energy Systems}, 2017.
+
+\bibitem[Harrell(2001)]{Harrell2001}
+Frank~E Harrell.
+\newblock \emph{{Regression modeling strategies. With applications to linear
+  models, logistic regression, and survival analysis}}.
+\newblock 2001.
+\newblock ISBN 978-0-387-95232-1.
+\newblock \doi{10.1007/978-1-4757-3462-1}.
+
+\bibitem[{HM Government}(2014)]{HMGovernment2014}
+{HM Government}.
+\newblock {Planning Portal Northern Ireland}, 2014.
+
+\bibitem[Janke(2010)]{Janke2010}
+J.~R. Janke.
+\newblock {Multicriteria GIS modeling of wind and solar farms in Colorado}.
+\newblock \emph{Renewable Energy}, 35:\penalty0 2228--2234, 2010.
+
+\bibitem[Jones and {Richard Eiser}(2010)]{Jones2010}
+Christopher~R. Jones and J.~{Richard Eiser}.
+\newblock {Understanding 'local' opposition to wind development in the UK: How
+  big is a backyard?}
+\newblock \emph{Energy Policy}, 38\penalty0 (6):\penalty0 3106--3117, 2010.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2010.01.051}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.enpol.2010.01.051}.
+
+\bibitem[Jones et~al.(2011)Jones, Orr, and Eiser]{Jones2011}
+Christopher~R. Jones, Barry~J. Orr, and J.~Richard Eiser.
+\newblock {When is enough, enough? Identifying predictors of capacity estimates
+  for onshore wind-power development in a region of the UK}.
+\newblock \emph{Energy Policy}, 39\penalty0 (8):\penalty0 4563--4577, 2011.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2011.04.044}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.enpol.2011.04.044}.
+
+\bibitem[Kazak et~al.(2017)Kazak, van Hoof, and Szewranski]{Kazak2017}
+Jan Kazak, Joost van Hoof, and Szymon Szewranski.
+\newblock {Challenges in the wind turbines location process in Central Europe
+  – The use of spatial decision support systems}.
+\newblock \emph{Renewable and Sustainable Energy Reviews}, 76\penalty0
+  (February):\penalty0 425--433, 2017.
+\newblock ISSN 18790690.
+\newblock \doi{10.1016/j.rser.2017.03.039}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.rser.2017.03.039}.
+
+\bibitem[Krohn and Damborg(1999)]{Krohn1999}
+Soren Krohn and Steffen Damborg.
+\newblock {On Public Attitudes Towards Wind Power}.
+\newblock \emph{Renewable Energy}, 16:\penalty0 954--960, 1999.
+\newblock ISSN 09601481.
+\newblock \doi{10.1016/S0960-1481(98)00339-5}.
+
+\bibitem[Ladenburg(2008)]{Ladenburg2008}
+Jacob Ladenburg.
+\newblock {Attitudes towards on-land and offshore wind power development in
+  Denmark; choice of development strategy}.
+\newblock \emph{Renewable Energy}, 33\penalty0 (1):\penalty0 111--118, 2008.
+\newblock ISSN 09601481.
+\newblock \doi{10.1016/j.renene.2007.01.011}.
+
+\bibitem[Langer et~al.(2016)Langer, Decker, Roosen, and Menrad]{Langer2016}
+Katharina Langer, Thomas Decker, Jutta Roosen, and Klaus Menrad.
+\newblock {A qualitative analysis to understand the acceptance of wind energy
+  in Bavaria}.
+\newblock \emph{Renewable and Sustainable Energy Reviews}, 64:\penalty0
+  248--259, 2016.
+\newblock ISSN 18790690.
+\newblock \doi{10.1016/j.rser.2016.05.084}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.rser.2016.05.084}.
+
+\bibitem[Lee et~al.(2009)Lee, Chen, and Kang]{Lee2009}
+Amy H~I Lee, Hsing~Hung Chen, and He~Yau Kang.
+\newblock {Multi-criteria decision making on strategic selection of wind
+  farms}.
+\newblock \emph{Renewable Energy}, 34\penalty0 (1):\penalty0 120--126, 2009.
+\newblock ISSN 09601481.
+\newblock \doi{10.1016/j.renene.2008.04.013}.
+
+\bibitem[Liu et~al.(2017)Liu, Wang, and Zhu]{Liu2017}
+Changyi Liu, Yang Wang, and Rong Zhu.
+\newblock {Assessment of the economic potential of China's onshore wind
+  electricity}.
+\newblock \emph{Resources, Conservation and Recycling}, 121:\penalty0 33--39,
+  2017.
+\newblock ISSN 18790658.
+\newblock \doi{10.1016/j.resconrec.2016.10.001}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.resconrec.2016.10.001}.
+
+\bibitem[Malczewski(2004)]{Malczewski2004}
+Jacek Malczewski.
+\newblock {GIS-based land-use suitability analysis: A critical overview}.
+\newblock \emph{Progress in Planning}, 62\penalty0 (1):\penalty0 3--65, 2004.
+\newblock ISSN 03059006.
+\newblock \doi{10.1016/j.progress.2003.09.002}.
+
+\bibitem[Manomaiphiboon et~al.(2017)Manomaiphiboon, Paton, Prabamroong,
+  Rajpreeja, Assareh, and Siriwan]{Manomaiphiboon2017}
+Kasemsan Manomaiphiboon, Carina~P. Paton, Thayukorn Prabamroong, Nuttee
+  Rajpreeja, Nosha Assareh, and Montana Siriwan.
+\newblock {Wind energy potential analysis for Thailand: Uncertainty from wind
+  maps and sensitivity to turbine technology}.
+\newblock \emph{International Journal of Green Energy}, 14\penalty0
+  (6):\penalty0 528--539, 2017.
+\newblock ISSN 1543-5075.
+\newblock \doi{10.1080/15435075.2017.1305963}.
+\newblock URL
+  \url{https://www.tandfonline.com/doi/full/10.1080/15435075.2017.1305963}.
+
+\bibitem[Mentis et~al.(2017)Mentis, Siyal, Korkovelos, and Howells]{Mentis2017}
+Dimitris Mentis, Shahid~Hussain Siyal, Alexandros Korkovelos, and Mark Howells.
+\newblock {Estimating the spatially explicit wind generated electricity cost in
+  Africa - A GIS based analysis}.
+\newblock \emph{Energy Strategy Reviews}, 17:\penalty0 45--49, 2017.
+\newblock ISSN 2211467X.
+\newblock \doi{10.1016/j.esr.2017.07.002}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.esr.2017.07.002}.
+
+\bibitem[Meyerhoff et~al.(2010)Meyerhoff, Ohl, and Hartje]{Meyerhoff2010}
+Jurgen Meyerhoff, Cornelia Ohl, and Volkmar Hartje.
+\newblock {Landscape externalities from onshore wind power}.
+\newblock \emph{Energy Policy}, 38\penalty0 (1):\penalty0 82--92, 2010.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2009.08.055}.
+
+\bibitem[Miller and Li(2014)]{Miller2014}
+Adam Miller and Ruopu Li.
+\newblock {A Geospatial Approach for Prioritizing Wind Farm Development in
+  Northeast Nebraska, USA}.
+\newblock \emph{ISPRS International Journal of Geo-Information}, 3\penalty0
+  (3):\penalty0 968--979, 2014.
+\newblock ISSN 2220-9964.
+\newblock \doi{10.3390/ijgi3030968}.
+
+\bibitem[Mohamed et~al.(2004)Mohamed, Nofal, Hassan, and Elkaffas]{Mohamed2004}
+Noha~Saleh Mohamed, Laila~Mohamed Nofal, Mona Hassan~Ahmed Hassan, and
+  Saleh~Mesbah Elkaffas.
+\newblock {Geographic information systems (GIS) analysis of under five
+  mortality in Alexandria.}
+\newblock \emph{The Journal of the Egyptian Public Health Association},
+  79\penalty0 (3-4):\penalty0 243--262, 2004.
+\newblock ISSN 0013-2446 (Print).
+
+\bibitem[Neufville(2013)]{Neufville2013}
+Laurence Neufville.
+\newblock {Wind farm Site Suitability Selection using Multi-Criteria Analysis
+  (MCA) and Spatial Modelling}.
+\newblock \penalty0 (July):\penalty0 1--29, 2013.
+
+\bibitem[Noorollahi et~al.(2015)Noorollahi, Yousefi, and
+  Mohammadi]{Noorollahi2015}
+Younes Noorollahi, Hossein Yousefi, and Mohammad Mohammadi.
+\newblock {Multi-criteria decision support system for wind farm site selection
+  using GIS}.
+\newblock \emph{Sustainable Energy Technologies and Assessments}, 13:\penalty0
+  38--50, 2015.
+\newblock ISSN 22131388.
+\newblock \doi{10.1016/j.seta.2015.11.007}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.seta.2015.11.007}.
+
+\bibitem[{Office for National Statistics}(2016)]{OfficeforNationalStatistics}
+{Office for National Statistics}.
+\newblock {2011 Census data}, 2016.
+\newblock URL \url{https://www.ons.gov.uk/census/2011census/2011censusdata}.
+
+\bibitem[ONS(2013)]{ONS2013}
+ONS.
+\newblock {2011 Census, Quick Statistics for Wales on National Identity,
+  Passports Held and Country of Birth}, 2013.
+
+\bibitem[{Ordnance Survey}(2016)]{Survey2016}
+{Ordnance Survey}.
+\newblock {OS Strategi}, 2016.
+\newblock URL \url{https://data.gov.uk/dataset/strategi}.
+
+\bibitem[OSM(2016)]{Overpass2016}
+OSM.
+\newblock {Overpass API}, 2016.
+\newblock URL \url{https://overpass-turbo.eu/}.
+
+\bibitem[Pope(2017)]{Pope2017}
+Addy. Pope.
+\newblock {UK National Parks}, 2017.
+\newblock URL \url{http://dx.doi.org/10.7488/ds/1810}.
+
+\bibitem[Populus(2005)]{Populus2005}
+Populus.
+\newblock {Energy Balance of Power Poll Fieldwork : July 1st-6th 2005}.
+\newblock pages 1--23, 2005.
+
+\bibitem[{R Core Team}(2018)]{R-base}
+{R Core Team}.
+\newblock \emph{R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria, 2018.
+\newblock URL \url{https://www.R-project.org/}.
+
+\bibitem[{Renewables First}(2016)]{RF2016}
+{Renewables First}.
+\newblock {Wind Turbine Planning Permission}, 2016.
+\newblock URL
+  \url{http://www.renewablesfirst.co.uk/windpower/wind-turbine-consenting/wind-turbine-planning-permission/}.
+
+\bibitem[Roddis et~al.(2018)Roddis, Carver, Dallimer, Norman, and
+  Ziv]{Roddis2018}
+Philippa Roddis, Stephen Carver, Martin Dallimer, Paul Norman, and Guy Ziv.
+\newblock {The role of community acceptance in planning outcomes for onshore
+  wind and solar farms : An energy justice analysis}.
+\newblock \emph{Applied Energy}, 226\penalty0 (October 2017):\penalty0
+  353--364, 2018.
+\newblock ISSN 0306-2619.
+\newblock \doi{10.1016/j.apenergy.2018.05.087}.
+\newblock URL \url{https://doi.org/10.1016/j.apenergy.2018.05.087}.
+
+\bibitem[Scherhaufer et~al.(2017)Scherhaufer, H\"{o}ltinger, Salak,
+  Schauppenlehner, and Schmidt]{Scherhaufer2017}
+Patrick Scherhaufer, Stefan H\"{o}ltinger, Boris Salak, Thomas Schauppenlehner,
+  and Johannes Schmidt.
+\newblock {Patterns of acceptance and non-acceptance within energy landscapes:
+  Acase study on wind energy expansion in Austria}.
+\newblock \emph{Energy Policy}, 109\penalty0 (May):\penalty0 863--870, 2017.
+\newblock URL \url{http://dx.doi.org/10.1016/j.enpol.2017.05.057}.
+
+\bibitem[Sliz-Szkliniarz and Vogt(2011)]{Sliz-Szkliniarz2011}
+Beata Sliz-Szkliniarz and Joachim Vogt.
+\newblock \emph{Renewable and Sustainable Energy Reviews}, 15\penalty0
+  (3):\penalty0 1696--1707, 2011.
+\newblock ISSN 13640321.
+
+\bibitem[Smith(2016)]{Smith2016}
+Louise Smith.
+\newblock {Planning for onshore wind farms}.
+\newblock \emph{House of Commons Briefing Paper}, \penalty0 (04370), 2016.
+\newblock URL \url{http://www.parliament.uk/briefing-papers/sn04370.pdf}.
+
+\bibitem[SNH(2009)]{SNH2009}
+SNH.
+\newblock {Siting and Designing windfarms in the landscape}.
+\newblock \penalty0 (December), 2009.
+
+\bibitem[Sonnberger and Ruddat(2017)]{Sonnberger2017}
+Marco Sonnberger and Michael Ruddat.
+\newblock {Local and socio-political acceptance of wind farms in Germany}.
+\newblock \emph{Technology in Society}, 51:\penalty0 56--65, 2017.
+\newblock ISSN 0160791X.
+\newblock URL \url{http://dx.doi.org/10.1016/j.techsoc.2017.07.005}.
+
+\bibitem[{SQW Energy}(2010)]{SQWEnergy2010}
+{SQW Energy}.
+\newblock {Renewable and Low-carbon Energy Capacity Methodology Methodology for
+  the English Regions}.
+\newblock Technical Report January, 2010.
+
+\bibitem[Stoddart and Turley(2012)]{Stoddart2012}
+Harley Stoddart and David Turley.
+\newblock {Review of approaches adopted in regional renewable energy capacity
+  assessments when following the Regional Renewable and Low Carbon Energy
+  Capacity Methodology}.
+\newblock Technical Report June, 2012.
+
+\bibitem[Stoltzfus(2011)]{Stoltzfus2011}
+Jill~C. Stoltzfus.
+\newblock {Logistic regression: A brief primer}.
+\newblock \emph{Academic Emergency Medicine}, 18\penalty0 (10):\penalty0
+  1099--1104, 2011.
+\newblock ISSN 10696563.
+\newblock \doi{10.1111/j.1553-2712.2011.01185.x}.
+
+\bibitem[Strachan and Lal(2004)]{Strachan2004}
+Peter~a. Strachan and David Lal.
+\newblock {Wind energy policy, planning and management practice in the UK: Hot
+  air or a gathering storm?}
+\newblock \emph{Regional Studies}, 38\penalty0 (5):\penalty0 551--571, 2004.
+\newblock ISSN 00343404.
+\newblock \doi{10.1080/0143116042000229311}.
+
+\bibitem[Toke(2005)]{Toke2005}
+Dave Toke.
+\newblock {Explaining wind power planning outcomes: Some findings from a study
+  in England and Wales}.
+\newblock \emph{Energy Policy}, 33\penalty0 (12):\penalty0 1527--1539, 2005.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2004.01.009}.
+
+\bibitem[Toke et~al.(2008)Toke, Breukers, and Wolsink]{Toke2008}
+David Toke, Sylvia Breukers, and Maarten Wolsink.
+\newblock {Wind power deployment outcomes: How can we account for the
+  differences?}
+\newblock \emph{Renewable and Sustainable Energy Reviews}, 12\penalty0
+  (4):\penalty0 1129--1147, 2008.
+\newblock ISSN 13640321.
+\newblock \doi{10.1016/j.rser.2006.10.021}.
+
+\bibitem[UNEP(2016)]{UNEP2016}
+UNEP.
+\newblock {Global trends in renewable energy}, 2016.
+
+\bibitem[Upham et~al.(2015)Upham, Oltra, and Boso]{Upham2015}
+Paul Upham, Christian Oltra, and \`{A}lex Boso.
+\newblock {Towards a cross-paradigmatic framework of the social acceptance of
+  energy systems}.
+\newblock \emph{Energy Research \& Social Science}, 8:\penalty0 100--112, 2015.
+\newblock ISSN 22146296.
+\newblock \doi{10.1016/j.erss.2015.05.003}.
+
+\bibitem[{US EPA} and Recovery(2002)]{USEPA2002}
+OSWER Office of Resource~Conservation {US EPA} and Recovery.
+\newblock {Waste Transfer Stations: A Manual for Decision-Making}.
+\newblock pages 1--66, 2002.
+\newblock URL
+  \url{papers3://publication/uuid/7CAEDFA2-1B14-4CFF-8B13-1E920D35AD80}.
+
+\bibitem[van~der Horst and Toke(2010)]{VanderHorst2010}
+Dan van~der Horst and David Toke.
+\newblock {Exploring the landscape of wind farm developments; local area
+  characteristics and planning process outcomes in rural England}.
+\newblock \emph{Land Use Policy}, 27\penalty0 (2):\penalty0 214--221, 2010.
+\newblock ISSN 02648377.
+\newblock \doi{10.1016/j.landusepol.2009.05.006}.
+
+\bibitem[{Van Haaren} and Fthenakis(2011)]{VanHaaren2011}
+Rob {Van Haaren} and Vasilis Fthenakis.
+\newblock {GIS-based wind farm site selection using spatial multi-criteria
+  analysis (SMCA): Evaluating the case for New York State}.
+\newblock \emph{Renewable and Sustainable Energy Reviews}, 15\penalty0
+  (7):\penalty0 3332--3340, 2011.
+\newblock ISSN 13640321.
+\newblock \doi{10.1016/j.rser.2011.04.010}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.rser.2011.04.010}.
+
+\bibitem[van Rensburg et~al.(2015)van Rensburg, Kelley, and
+  Jeserich]{VanRensburg20}
+Thomas~M. van Rensburg, Hugh Kelley, and Nadine Jeserich.
+\newblock {What influences the probability of wind farm planning approval:
+  Evidence from Ireland}.
+\newblock \emph{Ecological Economics}, 111:\penalty0 12--22, 2015.
+\newblock ISSN 09218009.
+\newblock \doi{10.1016/j.ecolecon.2014.12.012}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.ecolecon.2014.12.012}.
+
+\bibitem[Voivontas et~al.(1998)Voivontas, Assimacopoulos, Mourelatos, and
+  Corominas]{Voivontas1998}
+D.~Voivontas, D.~Assimacopoulos, a.~Mourelatos, and J.~Corominas.
+\newblock {Evaluation of renewable energy potential using a GIS decision
+  support system}.
+\newblock \emph{Renewable Energy}, 13\penalty0 (3):\penalty0 333--344, 1998.
+\newblock ISSN 09601481.
+\newblock \doi{10.1016/S0960-1481(98)00006-8}.
+
+\bibitem[Wang et~al.(2014)Wang, M'Ikiugu, and Kinoshita]{Wang2014}
+Qianna Wang, Martin~Mwirigi M'Ikiugu, and Isami Kinoshita.
+\newblock {A GIS-based approach in support of spatial planning for renewable
+  energy: A case study of Fukushima, Japan}.
+\newblock \emph{Sustainability (Switzerland)}, 6\penalty0 (4):\penalty0
+  2087--2117, 2014.
+\newblock ISSN 20711050.
+\newblock \doi{10.3390/su6042087}.
+
+\bibitem[Warren and McFadyen(2010)]{Warren2010}
+Charles~R. Warren and Malcolm McFadyen.
+\newblock {Does community ownership affect public attitudes to wind energy? A
+  case study from south-west Scotland}.
+\newblock \emph{Land Use Policy}, 27\penalty0 (2):\penalty0 204--213, 2010.
+\newblock ISSN 02648377.
+\newblock \doi{10.1016/j.landusepol.2008.12.010}.
+
+\bibitem[Warren et~al.(2005)Warren, Lumsden, O'Dowd, and Birnie]{Warren2005}
+Charles~R. Warren, Carolyn Lumsden, Simone O'Dowd, and Richard~V. Birnie.
+\newblock {'Green On Green': Public perceptions of wind power in Scotland and
+  Ireland}.
+\newblock \emph{Journal of Environmental Planning and Management}, 48\penalty0
+  (July):\penalty0 853--875, 2005.
+\newblock ISSN 0964-0568.
+\newblock \doi{10.1080/09640560500294376}.
+
+\bibitem[Watson and Hudson(2015)]{Watson2015}
+Joss J~W Watson and Malcolm~D. Hudson.
+\newblock {Regional Scale wind farm and solar farm suitability assessment using
+  GIS-assisted multi-criteria evaluation}.
+\newblock \emph{Landscape and Urban Planning}, 138:\penalty0 20--31, 2015.
+\newblock ISSN 01692046.
+\newblock \doi{10.1016/j.landurbplan.2015.02.001}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.landurbplan.2015.02.001}.
+
+\bibitem[Wolsink(2000)]{Wolsink2000}
+Maarten Wolsink.
+\newblock {Wind power and the NIMBY-myth: institutional capacity and the
+  limited significance of public support}.
+\newblock \emph{Renewable Energy}, 21\penalty0 (1):\penalty0 49--64, sep 2000.
+\newblock ISSN 09601481.
+\newblock \doi{10.1016/S0960-1481(99)00130-5}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S0960148199001305}.
+
+\bibitem[Wustenhagen et~al.(2007)Wustenhagen, Wolsink, and
+  Burer]{Wustenhagen2007}
+Rolf Wustenhagen, Maarten Wolsink, and Mary~Jean Burer.
+\newblock {Social acceptance of renewable energy innovation: An introduction to
+  the concept}.
+\newblock \emph{Energy Policy}, 35\penalty0 (5):\penalty0 2683--2691, 2007.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2006.12.001}.
+
+\bibitem[Yamada et~al.(2009)Yamada, Rogerson, and Lee]{Yamada2009}
+Ikuho Yamada, Peter~A. Rogerson, and Gyoungju Lee.
+\newblock {GeoSurveillance: A GIS-based system for the detection and monitoring
+  of spatial clusters}.
+\newblock \emph{Journal of Geographical Systems}, 11\penalty0 (2):\penalty0
+  155--173, 2009.
+\newblock ISSN 14355930.
+
+\bibitem[Yue and Wang(2006)]{Yue2006}
+Cheng~D. Yue and Shi~Sian Wang.
+\newblock {GIS-based evaluation of multifarious local renewable energy sources:
+  A case study of the Chigu area of southwestern Taiwan}.
+\newblock \emph{Energy Policy}, 34\penalty0 (6):\penalty0 730--742, 2006.
+\newblock ISSN 03014215.
+\newblock \doi{10.1016/j.enpol.2004.07.003}.
+
+\end{thebibliography}

@@ -1,10 +1,7 @@
 digraph G {
   graph[font = fontcm]
-  node [fontname = "helvetica", shape=box, style = filled, fillcolor = WhiteSmoke, width = 1.4, height = 0.6 fontcolor = black];
+  node [fontname = "Arial", shape=box, style = filled, fillcolor = WhiteSmoke, width = 1.4, height = 0.6 fontcolor = black];
   rankdir=TB
-  
-
-  
   
   Parameters[label = "Model \n Parameters", fillcolor = "#70AFD1"]
   Model[label = "Model", fillcolor = "#CBE1EE"]

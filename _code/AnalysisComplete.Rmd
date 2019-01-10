@@ -23,11 +23,6 @@ This file documents the full statistical analysis and provides detailed R analys
 
 To run the script, you will have to install the package `WindAnalysis`. This depends on the packages `caret`, `corrplot`, `ggplot2`, `magrittr`, `Hmisc`, `broom`, `car`, `plyr`, `psych`, `stats`, `ggthemes`, `grid`, `DiagrammeR`, `rsvg`, `DiagrammeRsvg`, `scales`, `knitr`. These packages are installed if they are not on the system when the `WindAnalysis` [@R-WindAnalysis] package is used. 
 
-```{r install-windanalysis, eval = FALSE}
-# This will not run automatically when you knit the file
-devtools::install_local("WindAnalysis")
-```
-
 
 ```{r setup, message=FALSE, warning=FALSE}
 library(WindAnalysis)
@@ -80,9 +75,9 @@ turbines_numeric <- df_turbine %>%
 
 # Remove Empty Columns
 turbines_numeric <- turbines_numeric %>%
-  select(-one_of(c('RO Banding', 'NA', 'NA.1', 'NA.2', 'NA.3', 'NA.4',
+  dplyr::select(-one_of(c('RO Banding', 'NA', 'NA.1', 'NA.2', 'NA.3', 'NA.4',
                    'NA.5', 'NA.6', 'Y Coordinate', 'X Coordinate'))) %>%
-  set_rownames(NULL) # Delete RO banding category
+  magrittr::set_rownames(NULL) # Delete RO banding category
 
 # Build Summary Table
 summaryTable <- 
@@ -91,7 +86,7 @@ summaryTable <-
   SummariseDataframe() %>%
   mutate(Variable = (matchNames(rownames(.)))) %>%
   dplyr::filter(Variable != "") %>%
-  select(Variable, everything())
+  dplyr::select(Variable, everything())
 ```
 
 (ref:SummaryStatistics)  Summary statistics of the parameters collected for onshore wind energy within the statistical analysis. These values represent the dataset before missing values were imputed
@@ -196,7 +191,7 @@ Further concern was raised for the scale of distance considered for geographic f
 # Truncate the long tail of the proximity data. Any relationship greater than 30km is unlikely to influence outcomes
 df_turbine_trunc <- 
   df_turbine %>%
-  select(Airports, AONB, ARoads, BRoads, HCoast, HVpowerline, MilitarySites, MinRoads, Motorways, NationalParks, NNR, Powerlines, PrimaryRoads, Railway, RAMSAR, SACS, SPA, SSSI, UrbanLarge, UrbanSmall, UrbanRegions)
+  dplyr::select(Airports, AONB, ARoads, BRoads, HCoast, HVpowerline, MilitarySites, MinRoads, Motorways, NationalParks, NNR, Powerlines, PrimaryRoads, Railway, RAMSAR, SACS, SPA, SSSI, UrbanLarge, UrbanSmall, UrbanRegions)
 
 # Truncate data and merge to original dataframe
 df_turbine_trunc[df_turbine_trunc >= 30] <- 30
@@ -516,7 +511,8 @@ fullModel <- glm(Status.Summary ~ No..of.Turbines + Turbine.Capacity..MW. + Wind
 
 
 model_pars <- stats::step(fullModel, direction = "backward", trace = 0)
-variables_pars <- broom::tidy(model_pars)[-1, 1] 
+variables_pars <- broom::tidy(model_pars)[-1, 1]
+variables_pars <- variables_pars$term
 model_pars_Summary <- LogResultsTable(model_pars)
 ```
 
@@ -539,6 +535,7 @@ Where significant variation is expected within subgroups, split data models are 
 
 
 ```{r BuildNestedModels, include=FALSE}
+
 variables_pars <- variables_pars[variables_pars != "SNP_PC_sha"]
 
 # Uses a range of custom functions within "Segmented_LogisticModelsComplete" to split data
@@ -591,6 +588,25 @@ write.csv(summary_split_model, file = "outputs/SplitModels.csv")
 segmented_country$plot
 ```
 
+```{r}
+# Make a segmented table
+england <- WindAnalysis::LogisticResultsTable(segmented_country$models$England) %>%
+  dplyr::select(c('Variable' ,'Odds Ratio', 'Sig.'))
+scotland <- WindAnalysis::LogisticResultsTable(segmented_country$models$Scotland) %>%
+  dplyr::select(c('Odds Ratio', 'Sig.'))
+wales <- WindAnalysis::LogisticResultsTable(segmented_country$models$Wales) %>%
+  dplyr::select(c('Odds Ratio', 'Sig.'))
+
+segmented <- bind_cols(england, scotland, wales) %>%
+  set_names(c("Variable", rep(c("OR", ""),3)))
+
+segmented$Variable <- matchNames(segmented$Variable)
+
+knitr::kable(segmented)
+
+```
+
+
 # Prediciting Site Suitability
 
 ```{r loadRastersFunction, echo = FALSE, message = FALSE}
@@ -629,7 +645,7 @@ LoadRaster <- function(dir, ls = NULL, message = FALSE){
 
 # Load the directory of rasters
 # These can be downloaded here:
-rasters_dir <- "C:/Rasters"
+rasters_dir <- "../_data/Rasters"
 
 # Extract parameters from model
 raster_names <- variables_pars[!variables_pars %in% c("Turbine.Capacity..MW.", "year")] %>%
@@ -663,7 +679,7 @@ rm(raster_stack)
 writeRaster(raster_predicted, "outputs/PredictedRaster.tif", overwrite = TRUE)
 ```
 
-# Finish
+# Saving Objects for Paper
 
 Some R objects are saved to the file to allow them to be access by the full report.
 
@@ -671,11 +687,70 @@ Some R objects are saved to the file to allow them to be access by the full repo
 # save tables for report
 write.csv(model_results, file = "tables/modelResults.csv")
 
-save(segmented_country, summary_split_model, model_pars, wind_models,
+save(segmented, segmented_country, summary_split_model, model_pars, wind_models,
      model_pars_Summary, model_results, fullResultsTable, OddsPlotPars,
      file = "outputs/codeOutputs.RData")
 ```
 
+-------
+
+# Reponse to Peer Review
+
+Several potential alterations were suggested within the peer review process. This proces
+
+## Proposed Model Alterations
+
+- Plateau the year variable to 2006: 
+
+```{r}
+
+# Truncate any years later than 2006
+df_turbine$year[df_turbine$year > 2006] <- 2006
+
+# Rerun model 7
+wind_models$No7 <- LogisticModel(variables_model_7, df_turbine)
+
+
+summary(wind_models$No7)
+LogisticDiagnostics(wind_models$No7)
+```
+
+- Does splitting the model into two (before/after 2006) help improve model fit?
+
+```{r YearNested, include=FALSE}
+variables_pars <- variables_pars[variables_pars != "SNP_PC_sha"]
+df_turbine$yearCategorySplit <- ifelse(df_turbine$year>2006, "After", "Before")
+
+# Uses a range of custom functions within "Segmented_LogisticModelsComplete" to split data
+segmented_year <- Segmented_LogisticModelsComplete(df_turbine, "yearCategorySplit", variables_pars, "Status.Summary", 0.2, 1)
+
+# Build Optimised Parameter Models
+models_split <- NULL
+models_split$before <- FindBestModel(df = segmented_year$data$`Before`, variables_pars)
+models_split$after <- FindBestModel(df = segmented_year$data$`After`, variables_pars, steps = 5)
+
+# Summarise the results
+summary_split_model <- LogResultsTable(segmented_year$models$`After`,
+                                       segmented_year$models$`Before`) %>%
+  set_colnames(c("2010 Onwards", "Before 2010"))
+```
+
+## Turbine Size 
+
+- How does turbine capacity and project size correlate?
+
+```{r}
+df_turbine_capacity <- df_turbine %>%
+  dplyr::filter(Turbine.Capacity..MW. != 0)
+
+ggplot(df_turbine_capacity, aes(Turbine.Capacity..MW., Capacity)) +
+  geom_point()
+```
+
+
+```{r}
+cor(df_turbine$Turbine.Capacity..MW., df_turbine$Capacity, use = "complete.obs")
+```
 
 -----
 
