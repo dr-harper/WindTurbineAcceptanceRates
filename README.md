@@ -1,14 +1,5 @@
 ## About the folder
 
-- **WindAnalysis**: contains the 
+This code supports the paper "Onshore wind and the likelihood of planning acceptance: learning from a Great Britain context". This code is also hosted on GitHub at https://github.com/dr-harper/WindTurbineStats.
 
-
-
-## Setup
-
-```
-install.packages("devtools")
-devtools::install_local("WindAnalysis")
-devtools::install_github("thomasp85/patchwork")
-
-```
+![https://ars.els-cdn.com/content/image/X03014215.jpg](https://ars.els-cdn.com/content/image/X03014215.jpg)
