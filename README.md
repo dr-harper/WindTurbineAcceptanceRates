@@ -3,3 +3,9 @@ Onshore wind and the likelihood of planning acceptance: learning from a Great Br
 
 <a href="http://dx.doi.org/10.1016/j.enpol.2019.01.002"><img src="https://img.shields.io/badge/DOI-http%3A%2F%2Fdx.doi.org%2F10.1016%2Fj.enpol.2019.01.002%20-blue.svg"/></a>
 <a href="https://www.journals.elsevier.com/energy-policy"><img src="https://img.shields.io/badge/Article-Link%20to%20paper-orange.svg"/></a>
+
+
+
+## Accessing the data
+
+The full dataset used for the modelling available through the Mendeley Data portal: https://data.mendeley.com/datasets/cwn2y977nn
