@@ -1,4 +1,4 @@
 Onshore wind and the likelihood of planning acceptance: learning from a Great Britain context <img src="energyPolicy.png" align="right" />
 ======================================================
 
-This code supports the paper "Onshore wind and the likelihood of planning acceptance: learning from a Great Britain context". This code is also hosted on GitHub at https://github.com/dr-harper/WindTurbineStats.
+![http://dx.doi.org/10.1016/j.enpol.2019.01.002](https://img.shields.io/badge/DOI-http%3A%2F%2Fdx.doi.org%2F10.1016%2Fj.enpol.2019.01.002%20article-green.svg)
